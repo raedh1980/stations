@@ -1,0 +1,29 @@
+.container {
+    width: 100%; /* Adjust the width as needed */
+    overflow: auto; /* Ensures that floating elements are contained within the container */
+}
+
+.rtl-table {
+  float:right;
+  font-family:Dubai;
+  font-weight:bold;
+    direction: rtl;
+    text-align: right;
+   
+    border-collapse: collapse; /* Collapses borders between table cells */
+    margin-top: 20px; /* Adds some space above the table */
+}
+
+    .rtl-table th,
+    .rtl-table td {
+        border: 1px solid #ccc; /* Light grey border for readability */
+        padding: 5px; /* Adds space around text in each cell */
+        text-align: right; /* Aligns text to the right for RTL */
+    }
+
+    .rtl-table th {
+        background-color: #f9f9f9; /* Light background for headers */
+        color: #333; /* Darker text for contrast */
+    }
+
+ 
