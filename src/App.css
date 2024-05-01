@@ -17,7 +17,7 @@
     .rtl-table th,
     .rtl-table td {
         border: 1px solid #ccc; /* Light grey border for readability */
-        padding: 5px; /* Adds space around text in each cell */
+        padding: 3px; /* Adds space around text in each cell */
         text-align: right; /* Aligns text to the right for RTL */
     }
 

@@ -86,24 +86,31 @@ function getTemperatureColor(temp) {
     const ranges = [
       
         { min: 0, max: 1, color: '#E0FFFF' },  // Pale blue
-        { min: 1, max: 3, color: '#00FFFF' },  // Lighter blue
-        { min: 3, max: 5, color: '#7FFFD4' },  // Light cyan
-        { min: 5, max: 7, color: '#AFEEEE' }, // Soft teal
-        { min: 7, max: 9, color: '#006400' },// Light green
-        { min: 9, max: 11, color: '#7FFF00' },// Lime
-        { min: 11, max: 14, color: '#ADFF2F' },// Light yellow
-        { min: 14, max: 16, color: '#7CFC00' },// Yellow
-        { min: 16, max: 18, color: '#ECEB00' },// Orange
-        { min: 18, max: 20, color: '#ADFF2F' },// Deep coral
-        { min: 20, max: 21, color: '#FFFF00' },// Reddish orange
-        { min: 21, max: 23, color: '#FFD700' },// Red
-        { min: 23, max: 25, color: '#FFA500' },// Deep red
-        { min: 24, max: 26, color: '#FF8C00' },// Darker red
-        { min: 26, max: 28, color: '#FF7F50' },// Dark red
+        { min: 1, max: 3, color: '#0000FF' },  // Lighter blue
+        { min: 3, max: 5, color: '#6495ED' },  // Light cyan
+
+        { min: 5, max: 7, color: '#1E90FF' }, // Soft teal
+        { min: 7, max: 8, color: '#00BFFF' },// Light green
+        { min: 8, max: 10, color: '#32CD32' },// Lime
+
+        { min: 10, max: 12, color: '#B1FB17' },// Light yellow
+        { min: 12, max: 14, color: '#00FF00' },// Yellow32CD32
+
+        { min: 14, max: 16, color: '#ADFF2F' },// Orange00FF00
+        { min: 16, max: 18, color: '#BDF516' },// Deep coral
+
+        { min: 18, max: 20, color: '#E2F516' },// Reddish orange
+        { min: 20, max: 22, color: '#FFFF33' },// Reddish orange
+        { min: 22, max: 24, color: '#FEF250' },// Red
+        { min: 24, max: 25, color: '#FFDB58' },// Deep red
+        { min: 25, max: 26, color: '#FDD017' },// Darker red
+        { min: 26, max: 28, color: '#F6BE00' },// Dark red
+
         { min: 28, max: 30, color: '#FF6347' },// Burgundy
         { min: 30, max: 33, color: '#FF4500' },// Plum
         { min: 33, max: 37, color: '#FF0000' },// Dark plum
         { min: 37, max: 39, color: '#B22222' },  // Near black
+
         { min: 40, max: 45, color: '#8B0000' }  // Near black
     ];
 
@@ -165,7 +172,7 @@ function App() {
             const wuUrl5 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId5}&format=json&units=m&apiKey=${apiKey5}&numericPrecision=decimal`;
             const wuDaily5 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId5}&format=json&units=m&apiKey=${apiKey5}&numericPrecision=decimal`;
 
-            const statsUrl = 'https://stations.arabiaweather.com/wsquery/query/multiQuerylatlonOffset?country=JO&range=0d:now&attrib=temp.max,temp.min,windspeed.max,windgust.max,baromin.max,baromin.min,baromin.avg,rainin.sum&latlon=31.890383,35.896030';
+            const statsUrl = 'https://corsproxy.io/?http%3A%2F%2Fstations.arabiaweather.com%2Fwsquery%2Fquery%2FmultiQuerylatlonOffset%3Fcountry%3DJO%26range%3D0d%3Anow%26attrib%3Dtemp.max%2Ctemp.min%2Cwindspeed.max%2Cwindgust.max%2Cbaromin.max%2Cbaromin.min%2Cbaromin.avg%2Crainin.sum%26latlon%3D31.890383%2C35.896030';
 
             try {
                 const [arabiaWeatherResult, wuResult, wuResult2, wuResult3, wuResult4, wuResult5, daily1,daily2,daily3,daily4,daily5,arStatsResult] = await Promise.all([
