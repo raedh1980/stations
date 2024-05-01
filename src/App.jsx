@@ -123,7 +123,7 @@ function App() {
         const fetchData = async () => {
 
 
-            const statsUrl = '/api/wsquery/query/multiQuerylatlonOffset';
+           /* const statsUrl = '/api/wsquery/query/multiQuerylatlonOffset';
             const statsParams = {
                 params: {
                     country: 'JO',
@@ -132,7 +132,7 @@ function App() {
                     latlon: '31.890383,35.896030'
                 }
             };
-
+            */
 
 
 
@@ -165,7 +165,7 @@ function App() {
             const wuUrl5 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId5}&format=json&units=m&apiKey=${apiKey5}&numericPrecision=decimal`;
             const wuDaily5 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId5}&format=json&units=m&apiKey=${apiKey5}&numericPrecision=decimal`;
 
-            //const statsUrl = 'http://stations.arabiaweather.com/wsquery/query/multiQuerylatlonOffset?country=JO&range=0d:now&attrib=temp.max,temp.min,windspeed.max,windgust.max,baromin.max,baromin.min,baromin.avg,rainin.sum&latlon=31.890383,35.896030';
+            const statsUrl = 'http://stations.arabiaweather.com/wsquery/query/multiQuerylatlonOffset?country=JO&range=0d:now&attrib=temp.max,temp.min,windspeed.max,windgust.max,baromin.max,baromin.min,baromin.avg,rainin.sum&latlon=31.890383,35.896030';
 
             try {
                 const [arabiaWeatherResult, wuResult, wuResult2, wuResult3, wuResult4, wuResult5, daily1,daily2,daily3,daily4,daily5,arStatsResult] = await Promise.all([
@@ -180,7 +180,7 @@ function App() {
                     axios.get(wuDaily3),
                     axios.get(wuDaily4),
                     axios.get(wuDaily5),
-                    axios.get(statsUrl, statsParams)
+                    axios.get(statsUrl)
                 ]);
 
 
