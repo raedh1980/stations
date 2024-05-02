@@ -13,19 +13,25 @@ th, td {
 
 
 .rtl-table {
-  float:right;
-  font-family:Dubai;
-  font-weight:bold;
+    width: 100%; /* Full-width can help utilize space */
+    max-width: 1200px; /* Or set a maximum width */
+    float: right;
+    font-family: Dubai;
+    font-weight: bold;
     direction: rtl;
     text-align: right;
     border-collapse: collapse; /* Collapses borders between table cells */
-    
+
+    border-collapse: separate; /* Ensures spacing is handled cleanly */
+    border-spacing: 2px; /* Adds space between cells */
+    border: 2px solid #ccc; /* Adds a border around the table */
+}
 }
 
     .rtl-table th,
     .rtl-table td {
         border: 1px solid #ccc; /* Light grey border for readability */
-        padding: 3px; /* Adds space around text in each cell */
+        padding: 10px; /* Adds space around text in each cell */
         text-align: right; /* Aligns text to the right for RTL */
     }
 
@@ -33,5 +39,8 @@ th, td {
         background-color: #f9f9f9; /* Light background for headers */
         color: #333; /* Darker text for contrast */
     }
-
+    .rtl-table th,
+    .rtl-table td {
+        line-height: 1.6; /* This increases the space between lines */
+    }
  
