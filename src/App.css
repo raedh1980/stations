@@ -1,7 +1,26 @@
-.container {
-    width: 100%; /* Adjust the width as needed */
-    overflow: auto; /* Ensures that floating elements are contained within the container */
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow-x: auto; /* Allow horizontal scrolling */
 }
+
+.table-container {
+    width: 100%;
+    overflow-x: auto; /* Allows horizontal scrolling if table exceeds screen width */
+}
+
+table {
+    min-width: 768px; /* Set a minimum width or the actual width you need */
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd; /* Optional: adds border for clarity */
+    text-align: left;
+    padding: 8px;
+}
+
 
 .rtl-table {
   float:right;
