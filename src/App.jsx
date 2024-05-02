@@ -130,7 +130,7 @@ function App() {
         const fetchData = async () => {
 
 
-            const statsUrl = 'https://stations.arabiaweather.com/wsquery/query/multiQuerylatlonOffset';
+            const statsUrl = 'api/wsquery/query/multiQuerylatlonOffset';
             const statsParams = {
                 params: {
                     country: 'JO',
