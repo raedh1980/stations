@@ -176,7 +176,7 @@ function App() {
 
             try {
                 const [arabiaWeatherResult, wuResult, wuResult2, wuResult3, wuResult4, wuResult5, daily1,daily2,daily3,daily4,daily5,arStatsResult] = await Promise.all([
-                    axios('http://stations.arabiaweather.com/weatherstation/api/get?ws=*&attr=*'),
+                    axios('https://stations.arabiaweather.com/weatherstation/api/get?ws=*&attr=*'),
                     axios.get(wuUrl),
                     axios.get(wuUrl2),
                     axios.get(wuUrl3),
