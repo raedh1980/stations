@@ -93,7 +93,7 @@ function getTemperatureColor(temp) {
         { min: 7, max: 8, color: '#00BFFF' },// Light green
         { min: 8, max: 10, color: '#32CD32' },// Lime
 
-        { min: 10, max: 12, color: '#B1FB17' },// Light yellow
+        { min: 10, max: 12, color: '#4CC417' },// Light yellow
         { min: 12, max: 14, color: '#00FF00' },// Yellow32CD32
 
         { min: 14, max: 16, color: '#ADFF2F' },// Orange00FF00

@@ -1,18 +1,8 @@
-body, html {
-    margin: 0;
-    padding: 0;
-    overflow-x: auto; /* Allow horizontal scrolling */
-}
-
-.table-container {
-    width: 100%;
-    overflow-x: auto; /* Allows horizontal scrolling if table exceeds screen width */
-}
-
-table {
-    min-width: 768px; /* Set a minimum width or the actual width you need */
-    width: 100%;
-    border-collapse: collapse;
+﻿@media (max-width: 1024px) {
+    body, .container {
+        width: 1024px; /* Force the width to be 1024px on all devices */
+        overflow-x: visible; /* Allow horizontal scrolling */
+    }
 }
 
 th, td {
@@ -28,9 +18,8 @@ th, td {
   font-weight:bold;
     direction: rtl;
     text-align: right;
-   
     border-collapse: collapse; /* Collapses borders between table cells */
-    margin-top: 20px; /* Adds some space above the table */
+    
 }
 
     .rtl-table th,
