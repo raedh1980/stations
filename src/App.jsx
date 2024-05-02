@@ -130,7 +130,7 @@ function App() {
         const fetchData = async () => {
 
 
-            const statsUrl = 'api/wsquery/query/multiQuerylatlonOffset';
+            const statsUrl = 'https://corsproxy.io/?' +'api/wsquery/query/multiQuerylatlonOffset';
             const statsParams = {
                 params: {
                     country: 'JO',
