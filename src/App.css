@@ -18,7 +18,7 @@ th, td {
 .rtl-table {
     font-size: 14px;
     width: 100%; /* Full-width can help utilize space */
-    max-width: 960px; /* Or set a maximum width */
+    max-width: 1024; /* Or set a maximum width */
     float: right;
     font-family: Tahoma;
     font-weight: bold;

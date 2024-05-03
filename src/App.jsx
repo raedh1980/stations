@@ -359,6 +359,7 @@ function App() {
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'windDirection', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الاتجاه</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'windGust', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الهبات</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'rainin', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الغزارة</th>
+                        <th>المحطة</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'dailyrain', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الامطار</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'tempMAX', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>العظمى</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'tempMIN', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الصغرى</th>
@@ -376,11 +377,12 @@ function App() {
                             <td>{item.windDirection || '-'}</td>
                             <td style={{ backgroundColor: item.windgustColor }}>{item.windgust || '-'} كم/س</td>
                             <td style={{ backgroundColor: item.rainRateColor }}>{item.rainin || '0'} مم/س</td>
+                            <td>{item.stationName}</td>
                             <td style={{ backgroundColor: item.totalRainColor }}>{item.dailyrain || '0'} مم</td>
                             
                             <td style={{ backgroundColor: item.tempMaxColor }}>{item.tempMAX || '-'}</td>
                             <td style={{ backgroundColor: item.tempMinColor }}>{item.tempMIN || '-'}</td>
-                            <td style={{ backgroundColor: item.windgustMaxColor }}>{item.windgustMAX || '-'} </td>
+                            <td style={{ backgroundColor: item.windgustMaxColor }}>{item.windgustMAX || '-'} كم</td>
 
                         </tr>
                     ))}
