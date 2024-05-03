@@ -1,6 +1,6 @@
-﻿@media (max-width: 1024px) {
+﻿@media (max-width: 1020px) {
     body, .container {
-        width: 1024px; /* Force the width to be 1024px on all devices */
+        width: 1020px; /* Force the width to be 1024px on all devices */
         overflow-x: visible; /* Allow horizontal scrolling */
     }
 }
@@ -13,18 +13,18 @@ th, td {
   
 
 .rtl-table {
-    font-size: 14px;
+    font-size: 16px;
     width: 100%; /* Full-width can help utilize space */
-    max-width: 1200px; /* Or set a maximum width */
+    max-width: 1100px; /* Or set a maximum width */
     float: right;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: Calibri;
     font-weight: bold;
     direction: rtl;
     text-align: center;
     border-collapse: collapse; /* Collapses borders between table cells */
 
     border-collapse: separate; /* Ensures spacing is handled cleanly */
-    border-spacing: 1px; /* Adds space between cells */
+    border-spacing: 2px; /* Adds space between cells */
     border: 1px solid #ccc; /* Adds a border around the table */
 }
 
@@ -42,6 +42,6 @@ th, td {
     }
     .rtl-table th,
     .rtl-table td {
-        line-height: 1; /* This increases the space between lines */
+        line-height: 1.5; /* This increases the space between lines */
     }
  
