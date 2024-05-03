@@ -8,12 +8,12 @@
 th, td {
     border: 1px solid #ddd; /* Optional: adds border for clarity */
     text-align: left;
-    padding: 8px;
+    padding: 5px;
 }
   
 
 .rtl-table {
-    font-size: 18px;
+    font-size: 16px;
     width: 100%; /* Full-width can help utilize space */
     max-width: 1200px; /* Or set a maximum width */
     float: right;
