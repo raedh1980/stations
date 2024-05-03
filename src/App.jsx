@@ -1,6 +1,9 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';  // Make sure your CSS file is imported
+
+
 const stationMapping = {
     "ocnqt975": "عبين",
     "jywmk994": "الطيبة الجنوبية",
@@ -121,10 +124,28 @@ function getTemperatureColor(temp) {
 
 
 
-
-
 function App() {
     const [weatherData, setWeatherData] = useState([]);
+    // At the top where you define your states
+    const [sortConfig, setSortConfig] = useState({ key: 'temp', direction: 'ascending' });
+
+    const sortData = (data) => {
+        let sortableItems = [...data];
+        if (sortConfig !== null) {
+            sortableItems.sort((a, b) => {
+                if (a[sortConfig.key] < b[sortConfig.key]) {
+                    return sortConfig.direction === 'ascending' ? -1 : 1;
+                }
+                if (a[sortConfig.key] > b[sortConfig.key]) {
+                    return sortConfig.direction === 'ascending' ? 1 : -1;
+                }
+                return 0;
+            });
+        }
+        return sortableItems;
+    };
+
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -271,7 +292,7 @@ function App() {
             }
         });
 
-        return Object.values(dataMap).filter(item => item && item.temp !== undefined && item.stationName).sort((a, b) => a.temp - b.temp);
+        return Object.values(dataMap).filter(item => item && item.temp !== undefined && item.stationName);//.sort((a, b) => a.temp - b.temp);
     }
 
     function transformWUData(currentData, dayData) {
@@ -325,25 +346,27 @@ function App() {
   
 
     return (
+        
+ 
         <div className="container">
             <table className="rtl-table" >
                 <thead>
                     <tr>
                         <th>المحطة</th>
-                        <th>الحرارة</th>
-                        <th>الرطوبة</th>
-                        <th>الرياح</th>
-                        <th>الاتجاه</th>
-                        <th>الهبات</th>
-                        <th>الغزارة</th>
-                        <th>الامطار</th>
-                        <th>العظمى</th>
-                        <th>الصغرى</th>
-                        <th>اعلى هبة</th>
+                        <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'temp', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الحرارة</th>
+                        <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'humidity', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الرطوبة</th>
+                        <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'windspeed', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الرياح</th>
+                        <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'windDirection', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الاتجاه</th>
+                        <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'windGust', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الهبات</th>
+                        <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'rainin', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الغزارة</th>
+                        <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'dailyrain', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الامطار</th>
+                        <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'tempMAX', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>العظمى</th>
+                        <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'tempMIN', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الصغرى</th>
+                        <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'windGustMAX', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>اعلى هبة</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {weatherData.map((item, index) => (
+                    {sortData(weatherData).map((item, index) => (
                         <tr key={index}>
                             <td>{item.stationName}</td>
                             <td style={{ backgroundColor: item.tempColor }}>{item.temp || '-'}</td>
@@ -357,7 +380,7 @@ function App() {
                             
                             <td style={{ backgroundColor: item.tempMaxColor }}>{item.tempMAX || '-'}</td>
                             <td style={{ backgroundColor: item.tempMinColor }}>{item.tempMIN || '-'}</td>
-                            <td style={{ backgroundColor: item.windgustMaxColor }}>{item.windgustMAX || '-'} كم</td>
+                            <td style={{ backgroundColor: item.windgustMaxColor }}>{item.windgustMAX || '-'} </td>
 
                         </tr>
                     ))}

@@ -10,12 +10,15 @@ th, td {
     text-align: left;
     padding: 8px;
 }
+
+ 
+
   
 
 .rtl-table {
-    font-size: 16px;
+    font-size: 18px;
     width: 100%; /* Full-width can help utilize space */
-    max-width: 1100px; /* Or set a maximum width */
+    max-width: 1000px; /* Or set a maximum width */
     float: right;
     font-family: Calibri;
     font-weight: bold;
@@ -23,8 +26,7 @@ th, td {
     text-align: center;
     border-collapse: collapse; /* Collapses borders between table cells */
 
-    border-collapse: separate; /* Ensures spacing is handled cleanly */
-    border-spacing: 2px; /* Adds space between cells */
+    border-spacing: 10px; /* Adds space between cells */
     border: 1px solid #ccc; /* Adds a border around the table */
 }
 
@@ -32,7 +34,7 @@ th, td {
     .rtl-table th,
     .rtl-table td {
         border: 1px solid #ccc; /* Light grey border for readability */
-        padding: 6px; /* Adds space around text in each cell */
+        padding: 15px; /* Adds space around text in each cell */
         text-align: right; /* Aligns text to the right for RTL */
     }
 
@@ -42,6 +44,13 @@ th, td {
     }
     .rtl-table th,
     .rtl-table td {
-        line-height: 1.5; /* This increases the space between lines */
+        cursor: pointer;
+        line-height: 0px; /* This increases the space between lines */
     }
- 
+        .rtl-table th.sorted-asc::after {
+            content: " ▲";
+        }
+
+        .rtl-table  th.sorted-desc::after {
+            content: " ▼";
+        }
