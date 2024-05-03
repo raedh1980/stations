@@ -8,14 +8,15 @@
 th, td {
     border: 1px solid #ddd; /* Optional: adds border for clarity */
     text-align: left;
-    padding: 5px;
+    padding: 8px;
 }
   
 
 .rtl-table {
-    font-size: 16px;
+    font-size: 18px;
     width: 100%; /* Full-width can help utilize space */
     max-width: 1200px; /* Or set a maximum width */
+    min-height:1300px;
     float: right;
     font-family: Dubai;
     font-weight: bold;
