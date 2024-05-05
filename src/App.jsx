@@ -128,7 +128,9 @@ function App() {
     const [weatherData, setWeatherData] = useState([]);
     // At the top where you define your states
     const [sortConfig, setSortConfig] = useState({ key: 'temp', direction: 'ascending' });
+    const [lastUpdateTime, setLastUpdateTime] = useState('');
 
+        
     const sortData = (data) => {
         let sortableItems = [...data];
         if (sortConfig !== null) {
@@ -161,6 +163,7 @@ function App() {
                 }
             };*/
            
+            setLastUpdateTime(new Date().toLocaleString());  // Updates with the current time
 
 
 
@@ -361,8 +364,9 @@ function App() {
         
  
         <div className="container">
+            
             <table className="rtl-table" >
-                <thead>
+                <thead><tr><th>اخر تحديث: {lastUpdateTime}</th></tr>
                     <tr>
                         <th>المحطة</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'temp', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الحرارة</th>
