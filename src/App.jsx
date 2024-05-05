@@ -23,7 +23,7 @@ const stationMapping = {
     "tnhkw851": "تلاع العلي",
     "latxr924": "جبل اللويبدة",
     "zpzih551": "ام السماق",
-    "emdtr434": "الهاشمي الشمالي",
+    "emdtr434": "الهاشمي",
     "cgofb280": "غمدان",
     "smwoo943": "مأدبا",
     "mcfud963": "مرج الحمام",
@@ -35,11 +35,11 @@ const stationMapping = {
     "lufbk802": "الزرقاء",
     "vwjcb125": "جبل المريخ",
     "IAMMAN46": "جبل الزهور ",
-    "IJERAS1": "جرش-الجبل الاخضر",
+    "IJERAS1": "جرش",
     "IAMMAN21": "طبربور",
-    "IALJAM3": "تلاع العلي- زياد",
-    "IALQUW1":"ابو علندا"
-
+    "IALJAM3": "تلاع - زياد",
+    "IALQUW1":"ابو علندا",
+    "IALJAM4" : "الكوم"
 };
 
 function degreesToCardinalDetailed(degrees) {
@@ -193,6 +193,14 @@ function App() {
             const wuUrl5 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId5}&format=json&units=m&apiKey=${apiKey5}&numericPrecision=decimal`;
             const wuDaily5 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId5}&format=json&units=m&apiKey=${apiKey5}&numericPrecision=decimal`;
 
+
+            const apiKey6 = '3db0ab40eef446bbb0ab40eef416bbb5'; // Weather Underground API Key
+            const stationId6 = 'IALJAM4'; // Weather Underground Station ID
+            const wuUrl6 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId6}&format=json&units=m&apiKey=${apiKey6}&numericPrecision=decimal`;
+            const wuDaily6 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId6}&format=json&units=m&apiKey=${apiKey6}&numericPrecision=decimal`;
+
+
+
             // Original URL
             const apiUrl = 'https://stations.arabiaweather.com/wsquery/query/multiQuerylatlonOffset?country=JO&range=0d:now&attrib=temp.max,temp.min,windspeed.max,windgust.max,baromin.max,baromin.min,baromin.avg,rainin.sum&latlon=31.890383,35.896030' + Date.now();
 
@@ -202,18 +210,20 @@ function App() {
            
 
             try {
-                const [arabiaWeatherResult, wuResult, wuResult2, wuResult3, wuResult4, wuResult5, daily1,daily2,daily3,daily4,daily5,arStatsResult] = await Promise.all([
+                const [arabiaWeatherResult, wuResult, wuResult2, wuResult3, wuResult4, wuResult5, wuResult6, daily1, daily2, daily3, daily4, daily5,daily6,arStatsResult] = await Promise.all([
                     axios('https://stations.arabiaweather.com/weatherstation/api/get?ws=*&attr=*'),
                     axios.get(wuUrl),
                     axios.get(wuUrl2),
                     axios.get(wuUrl3),
                     axios.get(wuUrl4),
                     axios.get(wuUrl5),
+                    axios.get(wuUrl6),
                     axios.get(wuDaily),
                     axios.get(wuDaily2),
                     axios.get(wuDaily3),
                     axios.get(wuDaily4),
                     axios.get(wuDaily5),
+                    axios.get(wuDaily6),
                     axios.get(proxiedUrl)
                 ]);
 
@@ -226,12 +236,14 @@ function App() {
                 const wuData3 = transformWUData(wuResult3.data, daily3.data);
                 const wuData4 = transformWUData(wuResult4.data, daily4.data);
                 const wuData5 = transformWUData(wuResult5.data, daily5.data);
-                
+                const wuData6 = transformWUData(wuResult6.data, daily6.data);
+
+
                 // Combine and process all data
                 const arDataMerged = mergeData(arabiaWeatherResult.data, arStatsResult.data);
 
                 // Combine the data from both sources
-                const combinedData = [...arDataMerged, ...wuData, ...wuData2, ...wuData3, ...wuData4, ...wuData5];
+                const combinedData = [...arDataMerged, ...wuData, ...wuData2, ...wuData3, ...wuData4, ...wuData5, ...wuData6];
 
                 // Sort the combined data by temperature
                 combinedData.sort((a, b) => a.temp - b.temp);
