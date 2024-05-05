@@ -388,10 +388,10 @@ function App() {
                             <td>{item.stationName}</td>
                             <td style={{ backgroundColor: item.tempColor }}>{item.temp || '-'}</td>
                             <td>{item.humidity || '-'}%</td>
-                             <td style={{ backgroundColor: item.windspeedColor }}>{item.windspeed || '-'} كم/س</td>
+                            <td style={{ backgroundColor: item.windspeedColor }}>{item.windspeed || '-'} كم</td>
 
                             <td>{item.windDirection || '-'}</td>
-                            <td style={{ backgroundColor: item.windgustColor }}>{item.windgust || '-'} كم/س</td>
+                            <td style={{ backgroundColor: item.windgustColor }}>{item.windgust || '-'} كم</td>
                             <td style={{ backgroundColor: item.rainRateColor }}>{item.rainin || '0'} مم/س</td>
                             <td>{item.stationName}</td>
                             <td style={{ backgroundColor: item.totalRainColor }}>{item.dailyrain || '0'} مم</td>
