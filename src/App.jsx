@@ -75,52 +75,77 @@ function getRainRateColor(rainRate) {
     return '#FFFFFF';  // Default color for undefined cases
 }
 function getRainTotalColor(totalRain) {
-    if (totalRain <= 0) return '#FFFFFF';  // No rain accumulated - very pale green
-    if (totalRain > 0 && totalRain <= 10) return '#A5D6A7';  // Light accumulation - light green
-    if (totalRain > 10 && totalRain <= 50) return '#66BB6A';  // Moderate accumulation - medium green
-    if (totalRain > 50 && totalRain <= 100) return '#2E7D32';  // High accumulation - dark green
-    if (totalRain > 100) return '#1B5E20';  // Very high accumulation - very dark green
-    return '#FFFFFF';  // Default color for undefined cases
+
+    if (totalRain) { 
+    const ranges = [
+
+        { min: 0.1, max: 3, color: '#E0FFFF', fontColor:'#000000' },  // Pale blue
+        
+        { min: 3, max: 10, color: '#1E90FF', fontColor: '#FFFFFF' }, // Soft teal
+        { min: 10, max: 20, color: '#00BFFF', fontColor: '#FFFFFF' },// Light green
+
+        { min: 20, max: 39, color: '#4CC417', fontColor: '#FFFFFF' },// Light yellow
+        { min: 39, max: 49, color: '#00FF00', fontColor: '#000000' },// Yellow32CD32
+
+        { min: 49, max: 59, color: '#ADFF2F', fontColor: '#000000' },// Orange00FF00
+        { min: 59, max: 69, color: '#BDF516', fontColor: '#000000' },// Deep coral
+
+        { min: 69, max: 79, color: '#E2F516', fontColor: '#000000' },// Reddish orange
+        { min: 79, max: 89, color: '#FFFF33', fontColor: '#000000' },// Reddish orange
+        { min: 89, max: 99, color: '#FEF250', fontColor: '#FFFFFF' },// Red
+        { min: 99, max: 115, color: '#FFDB58', fontColor: '#FFFFFF' },// Deep red
+        { min: 115, max: 129, color: '#FDD017', fontColor: '#FFFFFF' },// Darker red
+        { min: 129, max: 220, color: '#F6BE00', fontColor: '#FFFFFF' },// Dark red
+
+    ];
+    const defaultStyle = { backgroundColor: '#FFFFFF', fontColor: '#000000' };
+    const range = ranges.find(r => totalRain >= r.min && totalRain < r.max);
+    console.log("Rain Total:", totalRain, "Style Applied:", range ? { backgroundColor: range.color, color: range.fontColor } : defaultStyle);
+    return range ? { backgroundColor: range.color, color: range.fontColor } : defaultStyle;
+    }
+
 }
 function getTemperatureColor(temp) {
-    if (temp < 0) return '#1E88E5'; // Uniform blue for all temperatures below 0°C
 
+   
     // Define ranges for temperatures from 0 to 60, changing every 3 degrees
     const ranges = [
-      
-        { min: 0, max: 1, color: '#E0FFFF' },  // Pale blue
-        { min: 1, max: 3, color: '#0000FF' },  // Lighter blue
-        { min: 3, max: 5, color: '#6495ED' },  // Light cyan
 
-        { min: 5, max: 7, color: '#1E90FF' }, // Soft teal
-        { min: 7, max: 8, color: '#00BFFF' },// Light green
-        { min: 8, max: 10, color: '#32CD32' },// Lime
 
-        { min: 10, max: 12, color: '#4CC417' },// Light yellow
-        { min: 12, max: 14, color: '#00FF00' },// Yellow32CD32
+        { min: -10, max: 0, color: '#000000', fontColor: '#FFFFFF' },  // Pale blue
+        { min: 0.1, max: 3, color: '#0000FF', fontColor: '#FFFFFF' },  // Lighter blue
+        { min: 3, max: 5, color: '#6495ED', fontColor: '#FFFFFF' },  // Light cyan
 
-        { min: 14, max: 16, color: '#ADFF2F' },// Orange00FF00
-        { min: 16, max: 18, color: '#BDF516' },// Deep coral
+        { min: 5, max: 7, color: '#1E90FF', fontColor: '#FFFFFF' }, // Soft teal
+        { min: 7, max: 8, color: '#00BFFF', fontColor: '#FFFFFF' },// Light green
+        { min: 8, max: 11, color: '#32CD32', fontColor: '#FFFFFF' },// Lime
 
-        { min: 18, max: 20, color: '#E2F516' },// Reddish orange
-        { min: 20, max: 22, color: '#FFFF33' },// Reddish orange
-        { min: 22, max: 24, color: '#FEF250' },// Red
-        { min: 24, max: 25, color: '#FFDB58' },// Deep red
-        { min: 25, max: 26, color: '#FDD017' },// Darker red
-        { min: 26, max: 28, color: '#F6BE00' },// Dark red
+        { min: 11, max: 12, color: '#4CC417', fontColor: '#000000' },// Light yellow
+        { min: 12, max: 14, color: '#00FF00', fontColor: '#000000' },// Yellow32CD32
 
-        { min: 28, max: 30, color: '#FF6347' },// Burgundy
-        { min: 30, max: 33, color: '#FF4500' },// Plum
-        { min: 33, max: 37, color: '#FF0000' },// Dark plum
-        { min: 37, max: 39, color: '#B22222' },  // Near black
+        { min: 14, max: 16, color: '#ADFF2F', fontColor: '#000000' },// Orange00FF00
+        { min: 16, max: 18, color: '#BDF516', fontColor: '#000000' },// Deep coral
 
-        { min: 40, max: 45, color: '#8B0000' }  // Near black
+        { min: 18, max: 20, color: '#E2F516', fontColor: '#000000' },// Reddish orange
+        { min: 20, max: 22, color: '#FFFF33', fontColor: '#000000' },// Reddish orange
+        { min: 22, max: 24, color: '#FEF250', fontColor: '#000000' },// Red
+        { min: 24, max: 25, color: '#FFDB58', fontColor: '#000000' },// Deep red
+        { min: 25, max: 26, color: '#FDD017', fontColor: '#000000' },// Darker red
+        { min: 26, max: 28, color: '#F6BE00', fontColor: '#000000' },// Dark red
+
+        { min: 28, max: 30, color: '#FF6347', fontColor: '#FFFFFF' },// Burgundy
+        { min: 30, max: 33, color: '#FF4500', fontColor: '#FFFFFF' },// Plum
+        { min: 33, max: 37, color: '#FF0000', fontColor: '#FFFFFF' },// Dark plum
+        { min: 37, max: 39, color: '#B22222', fontColor: '#FFFFFF' },  // Near black
+
+        { min: 40, max: 50, color: '#8B0000', fontColor: '#FFFFFF' }  // Near black
     ];
 
+    const defaultStyle = { backgroundColor: '#FFFFFF', fontColor: '#000000' };
     const range = ranges.find(r => temp >= r.min && temp < r.max);
-    return range ? range.color : '#FFFFFF'; // Default color if no range matches
+    console.log("Temp:", temp, "Style Applied:", range ? { backgroundColor: range.color, color: range.fontColor } : defaultStyle);
+    return range ? { backgroundColor: range.color, color: range.fontColor } : defaultStyle;
 }
-
 
 
 
@@ -386,7 +411,15 @@ function App() {
                     {sortData(weatherData).map((item, index) => (
                         <tr key={index}>
                             <td>{item.stationName}</td>
-                            <td style={{ backgroundColor: item.tempColor }}>{item.temp || '-'}</td>
+                          
+                            <td style={{
+                                backgroundColor: item.tempColor ? item.tempColor.backgroundColor : '#FFFFFF',
+                                color: item.tempColor ? item.tempColor.color : '#000000'
+                            }}>
+                                {item.temp || '0'} 
+                            </td>
+
+
                             <td>{item.humidity || '-'}%</td>
                             <td style={{ backgroundColor: item.windspeedColor }}>{item.windspeed || '-'} كم</td>
 
@@ -394,10 +427,31 @@ function App() {
                             <td style={{ backgroundColor: item.windgustColor }}>{item.windgust || '-'} كم</td>
                             <td style={{ backgroundColor: item.rainRateColor }}>{item.rainin || '0'} مم/س</td>
                             <td>{item.stationName}</td>
-                            <td style={{ backgroundColor: item.totalRainColor }}>{item.dailyrain || '0'} مم</td>
+                            <td style={{
+                                backgroundColor: item.totalRainColor ? item.totalRainColor.backgroundColor : '#FFFFFF',
+                                color: item.totalRainColor ? item.totalRainColor.color : '#000000'
+                            }}>
+                                {item.dailyrain || '0'} مم
+                            </td>
+
                             
-                            <td style={{ backgroundColor: item.tempMaxColor }}>{item.tempMAX || '-'}</td>
-                            <td style={{ backgroundColor: item.tempMinColor }}>{item.tempMIN || '-'}</td>
+                    
+
+                            <td style={{
+                                backgroundColor: item.tempMaxColor ? item.tempMaxColor.backgroundColor : '#FFFFFF',
+                                color: item.tempMaxColor ? item.tempMaxColor.color : '#000000'
+                            }}>
+                                {item.tempMAX || '0'}
+                            </td>
+
+                            <td style={{
+                                backgroundColor: item.tempMinColor ? item.tempMinColor.backgroundColor : '#FFFFFF',
+                                color: item.tempMinColor ? item.tempMinColor.color : '#000000'
+                            }}>
+                                {item.tempMIN || '0'}
+                            </td>
+
+
                             <td style={{ backgroundColor: item.windgustMaxColor }}>{item.windgustMAX || '-'} كم</td>
 
                         </tr>
