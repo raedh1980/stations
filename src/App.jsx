@@ -447,7 +447,7 @@ function App() {
                             <td>{item.windDirection || '-'}</td>
                             <td style={{ backgroundColor: item.windgustColor }}>{item.windgust || '-'} كم</td>
                           
-
+                              
                             <td style={{
                                 backgroundColor: item.rainRateColor ? item.rainRateColor.backgroundColor : '#FFFFFF',
                                 color: item.rainRateColor ? item.rainRateColor.color : '#000000'
