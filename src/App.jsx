@@ -67,12 +67,33 @@ function getWindSpeedColor(speed) {
     return '#FFFFFF'; // Default color for any undefined cases
 }
 function getRainRateColor(rainRate) {
-    if (rainRate <= 0) return '#FFFFFF';  // No rain - very pale blue
-    if (rainRate > 0 && rainRate <= 2.5) return '#B3E5FC';  // Light rain - light blue
-    if (rainRate > 2.5 && rainRate <= 7.5) return '#81D4FA';  // Moderate rain - medium blue
-    if (rainRate > 7.5 && rainRate <= 15) return '#29B6F6';  // Heavy rain - dark blue
-    if (rainRate > 15) return '#0277BD';  // Violent rain - very dark blue
-    return '#FFFFFF';  // Default color for undefined cases
+    if (rainRate) {
+        const ranges = [
+
+            { min: 0.1, max: 3, color: '#E0FFFF', fontColor: '#000000' },  // Pale blue
+
+            { min: 3, max: 10, color: '#1E90FF', fontColor: '#FFFFFF' }, // Soft teal
+            { min: 10, max: 20, color: '#00BFFF', fontColor: '#FFFFFF' },// Light green
+
+            { min: 20, max: 39, color: '#4CC417', fontColor: '#FFFFFF' },// Light yellow
+            { min: 39, max: 49, color: '#00FF00', fontColor: '#000000' },// Yellow32CD32
+
+            { min: 49, max: 59, color: '#ADFF2F', fontColor: '#000000' },// Orange00FF00
+            { min: 59, max: 69, color: '#BDF516', fontColor: '#000000' },// Deep coral
+
+            { min: 69, max: 79, color: '#E2F516', fontColor: '#000000' },// Reddish orange
+            { min: 79, max: 89, color: '#FFFF33', fontColor: '#000000' },// Reddish orange
+            { min: 89, max: 99, color: '#FEF250', fontColor: '#FFFFFF' },// Red
+            { min: 99, max: 115, color: '#FFDB58', fontColor: '#FFFFFF' },// Deep red
+            { min: 115, max: 129, color: '#FDD017', fontColor: '#FFFFFF' },// Darker red
+            { min: 129, max: 220, color: '#F6BE00', fontColor: '#FFFFFF' },// Dark red
+
+        ];
+        const defaultStyle = { backgroundColor: '#FFFFFF', fontColor: '#000000' };
+        const range = ranges.find(r => rainRate >= r.min && rainRate < r.max);
+        console.log("Rain Rate:", rainRate, "Style Applied:", range ? { backgroundColor: range.color, color: range.fontColor } : defaultStyle);
+        return range ? { backgroundColor: range.color, color: range.fontColor } : defaultStyle;
+    }
 }
 function getRainTotalColor(totalRain) {
 
@@ -425,7 +446,17 @@ function App() {
 
                             <td>{item.windDirection || '-'}</td>
                             <td style={{ backgroundColor: item.windgustColor }}>{item.windgust || '-'} كم</td>
-                            <td style={{ backgroundColor: item.rainRateColor }}>{item.rainin || '0'} مم/س</td>
+                          
+
+                            <td style={{
+                                backgroundColor: item.rainRateColor ? item.rainRateColor.backgroundColor : '#FFFFFF',
+                                color: item.rainRateColor ? item.rainRateColor.color : '#000000'
+                            }}>
+                                {item.rainin || '0'} مم
+                            </td>
+
+
+
                             <td>{item.stationName}</td>
                             <td style={{
                                 backgroundColor: item.totalRainColor ? item.totalRainColor.backgroundColor : '#FFFFFF',
