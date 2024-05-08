@@ -151,12 +151,12 @@ function getTemperatureColor(temp) {
         { min: 20, max: 22, color: '#FFFF33', fontColor: '#000000' },// Reddish orange
         { min: 22, max: 24, color: '#FEF250', fontColor: '#000000' },// Red
         { min: 24, max: 25, color: '#FFDB58', fontColor: '#000000' },// Deep red
-        { min: 25, max: 26, color: '#FDD017', fontColor: '#000000' },// Darker red
-        { min: 26, max: 28, color: '#F6BE00', fontColor: '#000000' },// Dark red
+        { min: 25, max: 28, color: '#FDD017', fontColor: '#000000' },// Darker red
+        { min: 28, max: 30, color: '#F6BE00', fontColor: '#000000' },// Dark red
 
-        { min: 28, max: 30, color: '#FF6347', fontColor: '#FFFFFF' },// Burgundy
-        { min: 30, max: 33, color: '#FF4500', fontColor: '#FFFFFF' },// Plum
-        { min: 33, max: 37, color: '#FF0000', fontColor: '#FFFFFF' },// Dark plum
+        { min: 30, max: 32, color: '#FF6347', fontColor: '#FFFFFF' },// Burgundy
+        { min: 32, max: 34, color: '#FF4500', fontColor: '#FFFFFF' },// Plum
+        { min: 34, max: 37, color: '#FF0000', fontColor: '#FFFFFF' },// Dark plum
         { min: 37, max: 39, color: '#B22222', fontColor: '#FFFFFF' },  // Near black
 
         { min: 40, max: 50, color: '#8B0000', fontColor: '#FFFFFF' }  // Near black
@@ -425,7 +425,7 @@ function App() {
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'dailyrain', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الامطار</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'tempMAX', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>العظمى</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'tempMIN', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الصغرى</th>
-                        <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'windGustMAX', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>اعلى هبة</th>
+                        <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'windspeedMAX', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>اعلى هبة</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -483,7 +483,7 @@ function App() {
                             </td>
 
 
-                            <td style={{ backgroundColor: item.windgustMaxColor }}>{item.windgustMAX || '-'} كم</td>
+                            <td style={{ backgroundColor: item.windgustMaxColor }}>{item.windspeedMAX || '-'} كم</td>
 
                         </tr>
                     ))}
