@@ -396,6 +396,7 @@ function App() {
             tempMaxColor: getTemperatureColor(tempMax),
             tempMinColor: getTemperatureColor(tempMin),
             windgustMAX: windGustMax, // Converting to km/h
+            windspeedMAX: windGustMax,
             windgustMaxColor: getWindSpeedColor(windGustMax),
 
             last_updated: currentObservation.obsTimeUtc
