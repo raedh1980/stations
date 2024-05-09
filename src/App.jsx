@@ -52,17 +52,21 @@ function degreesToCardinalDetailed(degrees) {
     return cardinals[Math.round(((degrees * 10) % 3600) / 225)];
 }
 function getWindSpeedColor(speed) {
-    if (speed === 0) return '#FFFFFF'; // White for 0
-    if (speed >= 1 && speed < 7) return '#B3E5FC'; // Very Light Sky Blue
-    if (speed >= 7 && speed < 15) return '#CCFFFF'; // Sky Blue
-    if (speed >= 15 && speed < 25) return '#99FF99'; // Blue Green
-    if (speed >= 25 && speed < 38) return '#CCFF00'; // Light Green
-    if (speed >= 38 && speed < 49) return '#FFFF66'; // Green LED
-    if (speed >= 49 && speed < 59) return '#FF9800'; // Yellow LED
-    if (speed >= 59 && speed < 69) return '#FF9800'; // Orange
-    if (speed >= 69 && speed < 79) return '#FF5722'; // Brick Red
-    if (speed >= 79 && speed < 89) return '#F44336'; // Bright Red
-    if (speed >= 89 && speed < 100) return '#D32F2F'; // Red
+
+
+
+
+    if (speed == 0) return '#FFFFFF'; // White for 0
+    if (speed >= 1 && speed < 7) return '#E0F7FA'; // Very Light Sky Blue
+    if (speed >= 7 && speed < 15) return '#D5F5E3'; // Sky Blue
+    if (speed >= 15 && speed < 25) return '#ABEBC6'; // Blue Green
+    if (speed >= 25 && speed < 38) return '#FFF9C4'; // Light Green
+    if (speed >= 38 && speed < 49) return '#FFEE58'; // Green LED
+    if (speed >= 49 && speed < 59) return '#ADFF2F'; // Yellow LED
+    if (speed >= 59 && speed < 69) return '#FBC02D'; // Orange
+    if (speed >= 69 && speed < 79) return '#F57F17'; // Brick Red
+    if (speed >= 79 && speed < 89) return '#EF6C00'; // Bright Red
+    if (speed >= 89 && speed < 100) return '#E53935'; // Red
     if (speed > 100) return '#E91E63'; // Pink LED
     return '#FFFFFF'; // Default color for any undefined cases
 }
@@ -347,7 +351,7 @@ function App() {
                     raininSUM: record.raininSUM.toFixed(1),
                     tempMaxColor: getTemperatureColor(record.tempMAX),
                     tempMinColor: getTemperatureColor(record.tempMIN),
-                    windgustMaxColor: getWindSpeedColor(record.windgustMAX * 3.6),
+                    windgustMaxColor: getWindSpeedColor(record.windspeedMAX * 3.6),
                     last_updated: new Date(record.time).getTime() // Convert ISO string to timestamp if needed
                 };
             }
