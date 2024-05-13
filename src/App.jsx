@@ -51,10 +51,8 @@ function degreesToCardinalDetailed(degrees) {
     ];
     return cardinals[Math.round(((degrees * 10) % 3600) / 225)];
 }
+
 function getWindSpeedColor(speed) {
-
-
-
 
     if (speed == 0) return '#FFFFFF'; // White for 0
     if (speed >= 0.1 && speed < 7) return '#E0F7FA'; // Very Light Sky Blue
@@ -62,12 +60,13 @@ function getWindSpeedColor(speed) {
     if (speed >= 15 && speed < 25) return '#ABEBC6'; // Blue Green
     if (speed >= 25 && speed < 38) return '#d5f07d'; // Light Green
     if (speed >= 38 && speed < 49) return '#e4f07d'; // Green LED
-    if (speed >= 49 && speed < 59) return '# ffff91'; // Yellow LED
+    if (speed >= 49 && speed < 59) return '#ffff91'; // Yellow LED
     if (speed >= 59 && speed < 69) return '#FBC02D'; // Orange
     if (speed >= 69 && speed < 79) return '#fc5a28'; // Brick Red
     if (speed >= 79 && speed < 89) return '#EF6C00'; // Bright Red
     if (speed >= 89 && speed < 100) return '#E53935'; // Red
     if (speed > 100) return '#E91E63'; // Pink LED
+
     return '#FFFFFF'; // Default color for any undefined cases
 }
 function getRainRateColor(rainRate) {
@@ -202,20 +201,7 @@ function App() {
     useEffect(() => {
         const fetchData = async () => {
 
-            /*
-            const statsUrl = 'https://corsproxy.io/?' +'api/wsquery/query/multiQuerylatlonOffset';
-            const statsParams = {
-                params: {
-                    country: 'JO',
-                    range: '0d:now',
-                    attrib: 'temp.max,temp.min,windspeed.max,windgust.max,baromin.max,baromin.min,baromin.avg,rainin.sum',
-                    latlon: '31.890383,35.896030'
-                }
-            };*/
-           
             setLastUpdateTime(new Date().toLocaleString());  // Updates with the current time
-
-
 
             const apiKey = 'c0146b8d4b904893946b8d4b90589325'; // Weather Underground API Key
             const stationId = 'IAMMAN46'; // Weather Underground Station ID
@@ -227,19 +213,15 @@ function App() {
             const wuUrl2 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId2}&format=json&units=m&apiKey=${apiKey2}&numericPrecision=decimal`;
             const wuDaily2 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId2}&format=json&units=m&apiKey=${apiKey2}&numericPrecision=decimal`;
 
-
-
             const apiKey3 = '36d76d5a338a4641976d5a338a3641bb'; // Weather Underground API Key
             const stationId3 = 'IAMMAN21'; // Weather Underground Station ID
             const wuUrl3 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId3}&format=json&units=m&apiKey=${apiKey3}&numericPrecision=decimal`;
             const wuDaily3 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId3}&format=json&units=m&apiKey=${apiKey3}&numericPrecision=decimal`;
 
-
             const apiKey4 = '9bf5ca1d102a4146b5ca1d102aa1466b'; // Weather Underground API Key
             const stationId4 = 'IALJAM3'; // Weather Underground Station ID
             const wuUrl4 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId4}&format=json&units=m&apiKey=${apiKey4}&numericPrecision=decimal`;
             const wuDaily4 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId4}&format=json&units=m&apiKey=${apiKey4}&numericPrecision=decimal`;
-
 
             const apiKey5 = 'fa5b601da31748119b601da317281190'; // Weather Underground API Key
             const stationId5 = 'IALQUW1'; // Weather Underground Station ID
@@ -252,15 +234,12 @@ function App() {
             const wuUrl6 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId6}&format=json&units=m&apiKey=${apiKey6}&numericPrecision=decimal`;
             const wuDaily6 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId6}&format=json&units=m&apiKey=${apiKey6}&numericPrecision=decimal`;
 
-
-
             // Original URL
             const apiUrl = 'https://stations.arabiaweather.com/wsquery/query/multiQuerylatlonOffset?country=JO&range=0d:now&attrib=temp.max,temp.min,windspeed.max,windgust.max,baromin.max,baromin.min,baromin.avg,rainin.sum&latlon=31.890383,35.896030' + Date.now();
 
             // With corsproxy.io
             const proxiedUrl = 'https://corsproxy.io/?' + encodeURIComponent(apiUrl);
 
-           
 
             try {
                 const [arabiaWeatherResult, wuResult, wuResult2, wuResult3, wuResult4, wuResult5, wuResult6, daily1, daily2, daily3, daily4, daily5,daily6,arStatsResult] = await Promise.all([
@@ -281,9 +260,7 @@ function App() {
                 ]);
 
 
-                //const arData = processWeatherData(arabiaWeatherResult.data);
-                //const arStats = processStatsData(arStatsResult.data);
-
+   
                 const wuData = transformWUData(wuResult.data,daily1.data);
                 const wuData2 = transformWUData(wuResult2.data, daily2.data);
                 const wuData3 = transformWUData(wuResult3.data, daily3.data);
