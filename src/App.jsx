@@ -384,10 +384,10 @@ function App() {
         // Ensure the observations are sorted by time
         if (dayData.observations.length >= 2) {
             var latestObservation = currentData;
-            var observationOne5MinAgo = dayData[dayData.observations.length - 2];
+            var observationOne5MinAgo = dayData.observations[dayData.observations.length - 2];
 
             if (latestObservation != null && observationOne5MinAgo != null) {
-                last5minrain = latestObservation.Metric.PrecipTotal - observationOne5MinAgo.Metric.PrecipTotal;
+                last5minrain = latestObservation.observations[0].metric.precipTotal - observationOne5MinAgo.metric.precipTotal;
                 last5minrain = last5minrain >= 0 ? last5minrain : 0; // Ensure no negative values
             }
 
