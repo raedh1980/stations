@@ -379,6 +379,21 @@ function App() {
         const tempMin = Math.min(...dayObservations.map(obs => obs.metric.tempLow));
         const windGustMax = Math.max(...dayObservations.map(obs => obs.metric.windgustHigh));
 
+        
+        var last5minrain = 0.0;
+        // Ensure the observations are sorted by time
+        if (dayData.observations.length >= 2) {
+            var latestObservation = currentData;
+            var observationOne5MinAgo = dayData[dayData.observations.length - 2];
+
+            if (latestObservation != null && observationOne5MinAgo != null) {
+                last5minrain = latestObservation.Metric.PrecipTotal - observationOne5MinAgo.Metric.PrecipTotal;
+                last5minrain = last5minrain >= 0 ? last5minrain : 0; // Ensure no negative values
+            }
+
+
+        }
+
      
 
         return [{
@@ -392,7 +407,7 @@ function App() {
             windspeedColor: getWindSpeedColor(currentObservation.metric.windSpeed ),
             windgustColor: getWindSpeedColor(currentObservation.metric.windGust ),
             dailyrain: currentObservation.metric.precipTotal.toFixed(1),
-            rainin: currentObservation.metric.precipRate.toFixed(1),
+            rainin: (last5minrain * 4.7).toFixed(1) ,// currentObservation.metric.precipRate.toFixed(1),
             rainRateColor: getRainRateColor(currentObservation.metric.precipRate),
             totalRainColor: getRainTotalColor(currentObservation.metric.precipTotal),
             tempMAX:tempMax , // Converting to Celsius
