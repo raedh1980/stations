@@ -142,7 +142,7 @@ function getTemperatureColor(value) {
     } else if (value > 10 && value <= 12) {
         return { backgroundColor: '#32CD32', color: '#FFFFFF' }; // Light green
     } else if (value > 12 && value <= 15) {
-        return { backgroundColor: '#4CC417', color: '#FFFFFF' }; // Lime
+        return { backgroundColor: '#4CC417', color: '#000000' }; // Lime
     } else if (value > 15 && value <= 17) {
         return { backgroundColor: '#ADFF2F', color: '#000000' }; // Light yellow
     } else if (value > 17 && value < 20) {
