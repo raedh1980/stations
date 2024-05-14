@@ -129,46 +129,49 @@ function getRainTotalColor(totalRain) {
     }
 
 }
-function getTemperatureColor(temp) {
-
-   
-    // Define ranges for temperatures from 0 to 60, changing every 3 degrees
-    const ranges = [
-
-
-        { min: -10, max: 0, color: '#000000', fontColor: '#FFFFFF' },  // Pale blue
-        { min: 0.1, max: 3, color: '#0000FF', fontColor: '#FFFFFF' },  // Lighter blue
-        { min: 3, max: 5, color: '#6495ED', fontColor: '#FFFFFF' },  // Light cyan
-
-        { min: 5, max: 7, color: '#1E90FF', fontColor: '#FFFFFF' }, // Soft teal
-        { min: 7, max: 8, color: '#00BFFF', fontColor: '#FFFFFF' },// Light green
-        { min: 8, max: 11, color: '#32CD32', fontColor: '#FFFFFF' },// Lime
-
-        { min: 11, max: 12, color: '#4CC417', fontColor: '#000000' },// Light yellow
-        { min: 12, max: 14, color: '#00FF00', fontColor: '#000000' },// Yellow32CD32
-
-        { min: 14, max: 16, color: '#ADFF2F', fontColor: '#000000' },// Orange00FF00
-        { min: 16, max: 18, color: '#BDF516', fontColor: '#000000' },// Deep coral
-
-        { min: 18, max: 20, color: '#E2F516', fontColor: '#000000' },// Reddish orange
-        { min: 20, max: 22, color: '#FFFF33', fontColor: '#000000' },// Reddish orange
-        { min: 22, max: 24, color: '#FEF250', fontColor: '#000000' },// Red
-        { min: 24, max: 25, color: '#FFDB58', fontColor: '#000000' },// Deep red
-        { min: 25, max: 28, color: '#FDD017', fontColor: '#000000' },// Darker red
-        { min: 28, max: 30, color: '#F6BE00', fontColor: '#000000' },// Dark red
-
-        { min: 30, max: 32, color: '#FF6347', fontColor: '#FFFFFF' },// Burgundy
-        { min: 32, max: 34, color: '#FF4500', fontColor: '#FFFFFF' },// Plum
-        { min: 34, max: 37, color: '#FF0000', fontColor: '#FFFFFF' },// Dark plum
-        { min: 37, max: 39, color: '#B22222', fontColor: '#FFFFFF' },  // Near black
-
-        { min: 40, max: 55, color: '#8B0000', fontColor: '#FFFFFF' }  // Near black
-    ];
-
-    const defaultStyle = { backgroundColor: '#FFFFFF', fontColor: '#000000' };
-    const range = ranges.find(r => temp >= r.min && temp < r.max);
-    console.log("Temp:", temp, "Style Applied:", range ? { backgroundColor: range.color, color: range.fontColor } : defaultStyle);
-    return range ? { backgroundColor: range.color, color: range.fontColor } : defaultStyle;
+function getTemperatureColor(value) {
+  
+    if (value >= -10 && value <= 0) {
+        return { backgroundColor: '#000000', color: '#FFFFFF' }; // Pale blue
+    } else if (value > 0 && value <= 5) {
+        return { backgroundColor: '#0000FF', color: '#FFFFFF' }; // Lighter blue
+    } else if (value > 5 && value <= 8) {
+        return { backgroundColor: '#6495ED', color: '#FFFFFF' }; // Light cyan
+    } else if (value > 8 && value <= 10) {
+        return { backgroundColor: '#00BFFF', color: '#FFFFFF' }; // Soft teal
+    } else if (value > 10 && value <= 12) {
+        return { backgroundColor: '#32CD32', color: '#FFFFFF' }; // Light green
+    } else if (value > 12 && value <= 15) {
+        return { backgroundColor: '#4CC417', color: '#FFFFFF' }; // Lime
+    } else if (value > 15 && value <= 17) {
+        return { backgroundColor: '#ADFF2F', color: '#000000' }; // Light yellow
+    } else if (value > 17 && value < 20) {
+        return { backgroundColor: '#BDF516', color: '#000000' }; // Orange
+    } else if (value >= 20 && value <= 22) {
+        return { backgroundColor: '#FFFF33', color: '#000000' }; // Deep coral
+      } else if (value > 22 && value <= 23) {
+        return { backgroundColor: '#FEF250', color: '#000000' }; // Reddish orange
+    } else if (value > 23 && value <= 24) {
+        return { backgroundColor: '#FFDB58', color: '#000000' }; // Red
+    } else if (value > 24 && value <= 25) {
+        return { backgroundColor: '#FDD017', color: '#000000' }; // Deep red
+    } else if (value > 25 && value <= 28) {
+        return { backgroundColor: '#F6BE00', color: '#000000' }; // Darker red
+    } else if (value > 28 && value <= 30) {
+        return { backgroundColor: '#FF6347', color: '#000000' }; // Dark red
+    } else if (value > 30 && value <= 32) {
+        return { backgroundColor: '#FF4500', color: '#FFFFFF' }; // Burgundy
+    } else if (value > 32 && value <= 34) {
+        return { backgroundColor: '#FF4500', color: '#FFFFFF' }; // Plum
+    } else if (value > 34 && value <= 37) {
+        return { backgroundColor: '#B22222', color: '#FFFFFF' }; // Dark plum
+    } else if (value > 37 && value <= 39) {
+        return { backgroundColor: '#8B0000', color: '#FFFFFF' }; // Near black
+    } else if (value >= 40 && value <= 55) {
+        return { backgroundColor: '#8B0000', color: '#FFFFFF' }; // Near black
+    } else {
+        return { backgroundColor: '#FFFFFF', color: '#000000' }; // Default for out of range
+    }
 }
 
 
@@ -450,7 +453,7 @@ function App() {
                                 backgroundColor: item.tempColor ? item.tempColor.backgroundColor : '#FFFFFF',
                                 color: item.tempColor ? item.tempColor.color : '#000000'
                             }}>
-                                {item.temp || '0'} 
+                                {item.temp || '-'} 
                             </td>
 
 
