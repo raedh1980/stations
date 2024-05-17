@@ -138,13 +138,13 @@ function getTemperatureColor(value) {
     } else if (value > 5 && value <= 8) {
         return { backgroundColor: '#6495ED', color: '#FFFFFF' }; // Light cyan
     } else if (value > 8 && value <= 10) {
-        return { backgroundColor: '#00BFFF', color: '#FFFFFF' }; // Soft teal
+        return { backgroundColor: '#0F9F55', color: '#FFFFFF' }; // Soft teal
     } else if (value > 10 && value <= 12) {
-        return { backgroundColor: '#32CD32', color: '#FFFFFF' }; // Light green
+        return { backgroundColor: '#12A95C', color: '#FFFFFF' }; // Light green
     } else if (value > 12 && value <= 15) {
-        return { backgroundColor: '#4CC417', color: '#000000' }; // Lime
+        return { backgroundColor: '#15BB66', color: '#000000' }; // Lime
     } else if (value > 15 && value <= 17) {
-        return { backgroundColor: '#ADFF2F', color: '#000000' }; // Light yellow
+        return { backgroundColor: '#1CD777', color: '#000000' }; // Light yellow
     } else if (value > 17 && value < 20) {
         return { backgroundColor: '#BDF516', color: '#000000' }; // Orange
     } else if (value >= 20 && value <= 22) {
@@ -156,17 +156,17 @@ function getTemperatureColor(value) {
     } else if (value > 24 && value <= 25) {
         return { backgroundColor: '#FDD017', color: '#000000' }; // Deep red
     } else if (value > 25 && value <= 28) {
-        return { backgroundColor: '#F6BE00', color: '#000000' }; // Darker red
-    } else if (value > 28 && value <= 30) {
-        return { backgroundColor: '#FF6347', color: '#000000' }; // Dark red
-    } else if (value > 30 && value <= 32) {
-        return { backgroundColor: '#FF4500', color: '#FFFFFF' }; // Burgundy
+        return { backgroundColor: '#F9BF3F', color: '#000000' }; // Darker red
+    } else if (value > 28 && value < 30) {
+        return { backgroundColor: '#DF6D14', color: '#000000' }; // Dark red
+    } else if (value >= 30 && value <= 32) {
+        return { backgroundColor: '#FF0000', color: '#FFFFFF' }; // Burgundy
     } else if (value > 32 && value <= 34) {
-        return { backgroundColor: '#FF4500', color: '#FFFFFF' }; // Plum
+        return { backgroundColor: '#F10000', color: '#FFFFFF' }; // Plum
     } else if (value > 34 && value <= 37) {
-        return { backgroundColor: '#B22222', color: '#FFFFFF' }; // Dark plum
+        return { backgroundColor: '#960000', color: '#FFFFFF' }; // Dark plum
     } else if (value > 37 && value <= 39) {
-        return { backgroundColor: '#8B0000', color: '#FFFFFF' }; // Near black
+        return { backgroundColor: '#5E0000', color: '#FFFFFF' }; // Near black
     } else if (value >= 40 && value <= 55) {
         return { backgroundColor: '#8B0000', color: '#FFFFFF' }; // Near black
     } else {
