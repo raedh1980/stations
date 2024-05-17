@@ -239,14 +239,14 @@ function App() {
 
             // Original URL
             const apiUrl = 'https://stations.arabiaweather.com/wsquery/query/multiQuerylatlonOffset?country=JO&range=0d:now&attrib=temp.max,temp.min,windspeed.max,windgust.max,baromin.max,baromin.min,baromin.avg,rainin.sum&latlon=31.890383,35.896030' ;
-            //const apiUrl2 = 'https://stations.arabiaweather.com/wsquery/query/multiQuerylatlonOffset?country=JO&range=1d:now&attrib=temp.max,temp.min,windspeed.max,windgust.max,baromin.max,baromin.min,baromin.avg,rainin.sum&latlon=31.890383,35.896030';
+            const apiUrl2 = 'https://stations.arabiaweather.com/wsquery/query/multiQuerylatlonOffset?country=JO&range=1d:now&attrib=temp.max,temp.min,windspeed.max,windgust.max,baromin.max,baromin.min,baromin.avg,rainin.sum&latlon=31.890383,35.896030';
 
             // With corsproxy.io
             const proxiedUrl = 'https://corsproxy.io/?' + encodeURIComponent(apiUrl) +  Date.now();
-            //const proxiedUrl2 = 'https://corsproxy.io/?' + encodeURIComponent(apiUrl2) + Date.now();
+            const proxiedUrl2 = 'https://corsproxy.io/?' + encodeURIComponent(apiUrl2) + Date.now();
 
             try {
-                const [arabiaWeatherResult, wuResult, wuResult2, wuResult3, wuResult4, wuResult5, wuResult6, daily1, daily2, daily3, daily4, daily5, daily6, arStatsResult] = await Promise.all([
+                const [arabiaWeatherResult, wuResult, wuResult2, wuResult3, wuResult4, wuResult5, wuResult6, daily1, daily2, daily3, daily4, daily5, daily6, arStatsResult, arStatsResult2] = await Promise.all([
                     axios('https://stations.arabiaweather.com/weatherstation/api/get?ws=*&attr=*'),
                     axios.get(wuUrl),
                     axios.get(wuUrl2),
@@ -260,7 +260,8 @@ function App() {
                     axios.get(wuDaily4),
                     axios.get(wuDaily5),
                     axios.get(wuDaily6),
-                    axios.get(proxiedUrl)
+                    axios.get(proxiedUrl),
+                    axios.get(proxiedUrl2)
                 ]);
 
 
@@ -274,7 +275,7 @@ function App() {
 
 
                 // Combine and process all data
-                const arDataMerged = mergeData(arabiaWeatherResult.data, arStatsResult.data);
+                const arDataMerged = mergeData(arabiaWeatherResult.data, arStatsResult.data, arStatsResult2.data);
 
                 // Combine the data from both sources
                 const combinedData = [...arDataMerged, ...wuData, ...wuData2, ...wuData3, ...wuData4, ...wuData5, ...wuData6];
@@ -338,8 +339,24 @@ function App() {
             }
         });
 
+        // Process Stats Data 2
+        Object.entries(statsData2).forEach(([stationId, records]) => {
+            if (records.length > 0 && records[0].length > 0) {
+                const record = records[0][0];
+                if (!dataMap[stationId]) {
+                    // Initialize if not already present
+                    dataMap[stationId] = {
+                        stationName: stationMapping[stationId],
+                    };
+                }
+                // Update tempMIN only if it is less than the existing tempMIN in statsData
+                if (dataMap[stationId].tempMIN === undefined || record.tempMIN > dataMap[stationId].tempMIN) {
+                    dataMap[stationId].tempMIN = record.tempMIN;
+                    dataMap[stationId].tempMinColor = getTemperatureColor(record.tempMIN);
+                }
+            }
+        });
 
-       
 
         return Object.values(dataMap).filter(item => item && item.temp !== undefined && item.stationName);//.sort((a, b) => a.temp - b.temp);
     }
