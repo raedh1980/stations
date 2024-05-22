@@ -39,8 +39,13 @@ const stationMapping = {
     "IAMMAN21": "طبربور",
     "IALJAM3": "تلاع - زياد",
     "IALQUW1":"ابو علندا",
-    "IALJAM4" : "الكوم"
+    "IALJAM4": "الكوم",
+    "vsdur950": "الجندويل",
+    "piqvi310":"شفابدران"
 };
+ 
+
+
 
 function degreesToCardinalDetailed(degrees) {
     const cardinals = [
@@ -94,7 +99,7 @@ function getRainRateColor(rainRate) {
         ];
         const defaultStyle = { backgroundColor: '#FFFFFF', fontColor: '#000000' };
         const range = ranges.find(r => rainRate >= r.min && rainRate < r.max);
-        console.log("Rain Rate:", rainRate, "Style Applied:", range ? { backgroundColor: range.color, color: range.fontColor } : defaultStyle);
+      
         return range ? { backgroundColor: range.color, color: range.fontColor } : defaultStyle;
     }
 }
@@ -124,7 +129,7 @@ function getRainTotalColor(totalRain) {
     ];
     const defaultStyle = { backgroundColor: '#FFFFFF', fontColor: '#000000' };
     const range = ranges.find(r => totalRain >= r.min && totalRain < r.max);
-    console.log("Rain Total:", totalRain, "Style Applied:", range ? { backgroundColor: range.color, color: range.fontColor } : defaultStyle);
+ 
     return range ? { backgroundColor: range.color, color: range.fontColor } : defaultStyle;
     }
 
@@ -245,6 +250,7 @@ function App() {
             const proxiedUrl = 'https://corsproxy.io/?' + encodeURIComponent(apiUrl) +  Date.now();
             const proxiedUrl2 = 'https://corsproxy.io/?' + encodeURIComponent(apiUrl2) + Date.now();
 
+
             try {
                 const [arabiaWeatherResult, wuResult, wuResult2, wuResult3, wuResult4, wuResult5, wuResult6, daily1, daily2, daily3, daily4, daily5, daily6, arStatsResult, arStatsResult2] = await Promise.all([
                     axios('https://stations.arabiaweather.com/weatherstation/api/get?ws=*&attr=*'),
@@ -274,6 +280,10 @@ function App() {
                 const wuData6 = transformWUData(wuResult6.data, daily6.data);
 
 
+         
+            
+
+
                 // Combine and process all data
                 const arDataMerged = mergeData(arabiaWeatherResult.data, arStatsResult.data, arStatsResult2.data);
 
@@ -293,6 +303,7 @@ function App() {
         fetchData();
     }, []);
 
+ 
 
     function mergeData(arabiaWeatherData, statsData, statsData2) {
         let dataMap = {};
@@ -305,7 +316,9 @@ function App() {
             dataMap[stationId] = {
                 ...dataMap[stationId],
                 ...details,
-                stationName: stationMapping[stationId],  // Assuming stationMapping is a predefined mapping of station IDs to names
+                stationName: stationMapping[stationId],
+                temp:  details.temp ? details.temp.toFixed(1) : undefined,
+
                 windspeed: details.windspeed ? (details.windspeed * 3.6).toFixed(1) : undefined,  // Converting and fixing the precision
                 windgust: details.windgust ? (details.windgust * 3.6).toFixed(1) : undefined,
                 windDirection: degreesToCardinalDetailed(details.winddir),
@@ -313,7 +326,8 @@ function App() {
                 windgustColor: details.windgust ? getWindSpeedColor(details.windgust * 3.6) : '#ffffff', // Default white if no gust
                 tempColor: getTemperatureColor(details.temp),
                 rainRateColor: getRainRateColor(details.rainin),
-                totalRainColor: getRainTotalColor(details.dailyrain)
+                totalRainColor: getRainTotalColor(details.dailyrain),
+
             };
         });
 
@@ -321,10 +335,12 @@ function App() {
         Object.entries(statsData).forEach(([stationId, records]) => {
             if (records.length > 0 && records[0].length > 0) {
                 const record = records[0][0];
+
                 dataMap[stationId] = {
                     ...dataMap[stationId],
-                    tempMAX: record.tempMAX,
-                    tempMIN: record.tempMIN,
+                    tempMAX: record.tempMAX ? record.tempMAX.toFixed(1) : undefined,
+                    tempMIN: record.tempMIN ? record.tempMIN.toFixed(1) : undefined,
+                        
                     windspeedMAX: (record.windspeedMAX * 3.6).toFixed(1),
                     windgustMAX: (record.windgustMAX * 3.6).toFixed(1),
                     barominMAX: record.barominMAX,
@@ -349,9 +365,13 @@ function App() {
                         stationName: stationMapping[stationId],
                     };
                 }
+
+                if (dataMap[stationId].tempMIN < -30)
+                    dataMap[stationId].tempMIN = 0;
+
                 // Update tempMIN only if it is less than the existing tempMIN in statsData
                 if (dataMap[stationId].tempMIN === undefined || record.tempMIN > dataMap[stationId].tempMIN) {
-                    dataMap[stationId].tempMIN = record.tempMIN;
+                    dataMap[stationId].tempMIN = record.tempMIN.toFixed(1);
                     dataMap[stationId].tempMinColor = getTemperatureColor(record.tempMIN);
                 }
             }
