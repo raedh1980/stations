@@ -135,7 +135,7 @@ function getRainTotalColor(totalRain) {
 
 }
 function getTemperatureColor(value) {
-  
+   
     if (value >= -10 && value <= 0) {
         return { backgroundColor: '#000000', color: '#FFFFFF' }; // Pale blue
     } else if (value > 0 && value <= 5) {
@@ -144,14 +144,18 @@ function getTemperatureColor(value) {
         return { backgroundColor: '#6495ED', color: '#FFFFFF' }; // Light cyan
     } else if (value > 8 && value <= 10) {
         return { backgroundColor: '#0F9F55', color: '#FFFFFF' }; // Soft teal
-    } else if (value > 10 && value <= 12) {
+    } else if (value > 10 && value <= 13) {
         return { backgroundColor: '#12A95C', color: '#FFFFFF' }; // Light green
-    } else if (value > 12 && value <= 15) {
+    } else if (value > 13 && value <= 15) {
         return { backgroundColor: '#15BB66', color: '#000000' }; // Lime
-    } else if (value > 15 && value <= 17) {
+    } else if (value > 15 && value <= 16) {
         return { backgroundColor: '#1CD777', color: '#000000' }; // Light yellow
-    } else if (value > 17 && value < 20) {
+    } else if (value > 16 && value <= 18) {
         return { backgroundColor: '#BDF516', color: '#000000' }; // Orange
+
+    } else if (value > 18 && value < 20) {
+        return { backgroundColor: '#eaf516', color: '#000000' }; // Orange
+
     } else if (value >= 20 && value <= 22) {
         return { backgroundColor: '#FFFF33', color: '#000000' }; // Deep coral
       } else if (value > 22 && value <= 23) {
