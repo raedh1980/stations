@@ -215,7 +215,7 @@ function App() {
 
             setLastUpdateTime(new Date().toLocaleString());  // Updates with the current time
 
-            const apiKey = 'c0146b8d4b904893946b8d4b90589325'; // Weather Underground API Key
+            const apiKey = 'c0146b8d4b904893946b8d4b90589325'; // Weather Underground API Merg
             const stationId = 'IAMMAN46'; // Weather Underground Station ID
             const wuUrl = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId}&format=json&units=m&apiKey=${apiKey}&numericPrecision=decimal`;
             const wuDaily = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId}&format=json&units=m&apiKey=${apiKey}&numericPrecision=decimal`;
@@ -370,14 +370,16 @@ function App() {
                     };
                 }
 
-                if (dataMap[stationId].tempMIN < -30)
-                    dataMap[stationId].tempMIN = 0;
+                
 
                 // Update tempMIN only if it is less than the existing tempMIN in statsData
-                if (dataMap[stationId].tempMIN === undefined || record.tempMIN > dataMap[stationId].tempMIN) {
+                if (dataMap[stationId].tempMIN === undefined || record.tempMIN < dataMap[stationId].tempMIN) {
                     dataMap[stationId].tempMIN = record.tempMIN.toFixed(1);
                     dataMap[stationId].tempMinColor = getTemperatureColor(record.tempMIN);
                 }
+
+                if (dataMap[stationId].tempMIN < -30)
+                    dataMap[stationId].tempMIN = 0;
             }
         });
 
