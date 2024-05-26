@@ -257,23 +257,29 @@ function App() {
             const wuUrl5 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId5}&format=json&units=m&apiKey=${apiKey5}&numericPrecision=decimal`;
             const wuDaily5 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId5}&format=json&units=m&apiKey=${apiKey5}&numericPrecision=decimal`;
 
-
             const apiKey6 = '3db0ab40eef446bbb0ab40eef416bbb5'; // Weather Underground API Key
             const stationId6 = 'IALJAM4'; // Weather Underground Station ID
             const wuUrl6 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId6}&format=json&units=m&apiKey=${apiKey6}&numericPrecision=decimal`;
             const wuDaily6 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId6}&format=json&units=m&apiKey=${apiKey6}&numericPrecision=decimal`;
 
-            // Original URL
-            const apiUrl = 'https://stations.arabiaweather.com/wsquery/query/multiQuerylatlonOffset?country=JO&range=0d:now&attrib=temp.max,temp.min,windspeed.max,windgust.max,baromin.max,baromin.min,baromin.avg,rainin.sum&latlon=31.890383,35.896030';
-            const apiUrl2 = 'https://stations.arabiaweather.com/wsquery/query/multiQuerylatlonOffset?country=JO&range=1d:now&attrib=temp.max,temp.min,windspeed.max,windgust.max,baromin.max,baromin.min,baromin.avg,rainin.sum&latlon=31.890383,35.896030';
+           
+            // Filter out stations starting with IA and IJ
+            const filteredStationList = Object.keys(stationMapping).filter(id => !id.startsWith('IA') && !id.startsWith('IJ'));
 
-            // With corsproxy.io
-            const proxiedUrl = 'https://corsproxy.io/?' + encodeURIComponent(apiUrl) + Date.now();
-            const proxiedUrl2 = 'https://corsproxy.io/?' + encodeURIComponent(apiUrl2) + Date.now();
+            // Calculate today's start and end timestamps
+            const today = new Date();
+            const startOfDay = Math.floor(new Date(today.setHours(0, 0, 0, 0)).getTime() / 1000);
+            const now = Math.floor(new Date().getTime() / 1000);
 
+
+            // Create URLs for the filtered stations
+            const statsUrls = filteredStationList.map(stationId => {
+                const statsUrl = `https://stations.arabiaweather.com/wsquery/query/singleQuery?ID=${stationId}&range=${startOfDay}:${now}&attrib=temp.avg,temp.max,temp.min,humidity.avg,humidity.max,humidity.min,windspeed.avg,windspeed.max,windspeed.min,rainin.avg,rainin.max,rainin.min,baromin.avg,baromin.max,baromin.min&groupby=1h`;
+                return { stationId, url: `https://corsproxy.io/?${encodeURIComponent(statsUrl)}` };
+            });
 
             try {
-                const [arabiaWeatherResult, wuResult, wuResult2, wuResult3, wuResult4, wuResult5, wuResult6, daily1, daily2, daily3, daily4, daily5, daily6, arStatsResult, arStatsResult2] = await Promise.all([
+                const [arabiaWeatherResult, wuResult, wuResult2, wuResult3, wuResult4, wuResult5, wuResult6, daily1, daily2, daily3, daily4, daily5, daily6,    ...statsResults] = await Promise.all([
                     axios('https://stations.arabiaweather.com/weatherstation/api/get?ws=*&attr=*'),
                     axios.get(wuUrl),
                     axios.get(wuUrl2),
@@ -287,11 +293,8 @@ function App() {
                     axios.get(wuDaily4),
                     axios.get(wuDaily5),
                     axios.get(wuDaily6),
-                    axios.get(proxiedUrl),
-                    axios.get(proxiedUrl2)
+                    ...statsUrls.map(({ url }) => axios.get(url))
                 ]);
-
-
 
                 const wuData = transformWUData(wuResult.data, daily1.data);
                 const wuData2 = transformWUData(wuResult2.data, daily2.data);
@@ -301,19 +304,13 @@ function App() {
                 const wuData6 = transformWUData(wuResult6.data, daily6.data);
 
 
+                const statsData = statsResults.map((result, index) => ({ stationId: statsUrls[index].stationId, data: result.data }));
 
+                const arDataMerged = mergeData(arabiaWeatherResult.data, statsData);
 
-
-
-                // Combine and process all data
-                const arDataMerged = mergeData(arabiaWeatherResult.data, arStatsResult.data, arStatsResult2.data);
-
-                // Combine the data from both sources
                 const combinedData = [...arDataMerged, ...wuData, ...wuData2, ...wuData3, ...wuData4, ...wuData5, ...wuData6];
 
-                // Sort the combined data by temperature
                 combinedData.sort((a, b) => a.temp - b.temp);
-
 
                 setWeatherData(combinedData);
             } catch (error) {
@@ -322,14 +319,12 @@ function App() {
         };
 
         fetchData();
+
     }, []);
 
-
-
-    function mergeData(arabiaWeatherData, statsData, statsData2) {
+    function mergeData(arabiaWeatherData, statsDataArray) {
         let dataMap = {};
 
-        // Process Arabia Weather Data
         arabiaWeatherData.forEach(item => {
             const stationId = Object.keys(item)[0];
             const details = item[stationId];
@@ -339,70 +334,105 @@ function App() {
                 ...details,
                 stationName: stationMapping[stationId],
                 temp: details.temp ? details.temp.toFixed(1) : undefined,
-
-                windspeed: details.windspeed ? (details.windspeed * 3.6).toFixed(1) : undefined,  // Converting and fixing the precision
+                windspeed: details.windspeed ? (details.windspeed * 3.6).toFixed(1) : undefined,
                 windgust: details.windgust ? (details.windgust * 3.6).toFixed(1) : undefined,
                 windDirection: degreesToCardinalDetailed(details.winddir),
-                windspeedColor: getWindSpeedColor(details.windspeed * 3.6),
-                windgustColor: details.windgust ? getWindSpeedColor(details.windgust * 3.6) : '#ffffff', // Default white if no gust
-                tempColor: getTemperatureColor(details.temp),
-                rainRateColor: getRainRateColor(details.rainin),
-                totalRainColor: getRainTotalColor(details.dailyrain),
-
+                windspeedColor: details.windspeed ? getWindSpeedColor(details.windspeed * 3.6) : undefined,
+                windgustColor: details.windgust ? getWindSpeedColor(details.windgust * 3.6) : '#ffffff',
+                tempColor: details.temp ? getTemperatureColor(details.temp) : undefined,
+                rainRateColor: details.rainin ? getRainRateColor(details.rainin) : undefined,
+                totalRainColor: details.dailyrain ? getRainTotalColor(details.dailyrain) : undefined,
             };
         });
 
-        // Process Stats Data
-        Object.entries(statsData).forEach(([stationId, records]) => {
-            if (records.length > 0 && records[0].length > 0) {
-                const record = records[0][0];
-
-                dataMap[stationId] = {
-                    ...dataMap[stationId],
-                    tempMAX: record.tempMAX ? record.tempMAX.toFixed(1) : undefined,
-                    tempMIN: record.tempMIN ? record.tempMIN.toFixed(1) : undefined,
-
-                    windspeedMAX: (record.windspeedMAX * 3.6).toFixed(1),
-                    windgustMAX: (record.windgustMAX * 3.6).toFixed(1),
-                    barominMAX: record.barominMAX,
-                    barominMIN: record.barominMIN,
-                    barominAVG: record.barominAVG,
-                    raininSUM: record.raininSUM.toFixed(1),
-                    tempMaxColor: getTemperatureColor(record.tempMAX),
-                    tempMinColor: getTemperatureColor(record.tempMIN),
-                    windgustMaxColor: getWindSpeedColor(record.windspeedMAX * 3.6),
-                    last_updated: new Date(record.time).getTime() // Convert ISO string to timestamp if needed
-                };
+        statsDataArray.forEach(({ stationId, data }) => {
+            if (!data.length) {
+                console.warn('No data for station:', stationId);
+                return;
             }
-        });
 
-        // Process Stats Data 2
-        Object.entries(statsData2).forEach(([stationId, records]) => {
-            if (records.length > 0 && records[0].length > 0) {
-                const record = records[0][0];
+            data.forEach(record => {
                 if (!dataMap[stationId]) {
-                    // Initialize if not already present
-                    dataMap[stationId] = {
-                        stationName: stationMapping[stationId],
-                    };
+                    dataMap[stationId] = { stationName: stationMapping[stationId] };
                 }
 
+                record.forEach(observation => {
+                    if (observation.tempMAX !== undefined) {
+                        dataMap[stationId].tempMAX = Math.max(dataMap[stationId].tempMAX || -Infinity, observation.tempMAX);
+                    }
 
+                    if (observation.tempMIN !== undefined) {
+                        dataMap[stationId].tempMIN = Math.min(dataMap[stationId].tempMIN || Infinity, observation.tempMIN);
+                    }
 
-                // Update tempMIN only if it is less than the existing tempMIN in statsData
-                if (dataMap[stationId].tempMIN === undefined || record.tempMIN < dataMap[stationId].tempMIN) {
-                    dataMap[stationId].tempMIN = record.tempMIN.toFixed(1);
-                    dataMap[stationId].tempMinColor = getTemperatureColor(record.tempMIN);
+                    if (observation.humidityMAX !== undefined) {
+                        dataMap[stationId].humidityMAX = Math.max(dataMap[stationId].humidityMAX || -Infinity, observation.humidityMAX);
+                    }
+
+                    if (observation.humidityMIN !== undefined) {
+                        dataMap[stationId].humidityMIN = Math.min(dataMap[stationId].humidityMIN || Infinity, observation.humidityMIN);
+                    }
+
+                    if (observation.windspeedMAX !== undefined) {
+                        dataMap[stationId].windspeedMAX = Math.max(dataMap[stationId].windspeedMAX || -Infinity, observation.windspeedMAX * 3.6);
+                    }
+
+                    if (observation.windgustMAX !== undefined) {
+                        dataMap[stationId].windgustMAX = Math.max(dataMap[stationId].windgustMAX || -Infinity, observation.windgustMAX * 3.6);
+                    }
+
+                    if (observation.barominMAX !== undefined) {
+                        dataMap[stationId].barominMAX = Math.max(dataMap[stationId].barominMAX || -Infinity, observation.barominMAX);
+                    }
+
+                    if (observation.barominMIN !== undefined) {
+                        dataMap[stationId].barominMIN = Math.min(dataMap[stationId].barominMIN || Infinity, observation.barominMIN);
+                    }
+
+                    if (observation.barominAVG !== undefined) {
+                        dataMap[stationId].barominAVG = observation.barominAVG;
+                    }
+
+                    if (observation.raininAVG !== undefined) {
+                        dataMap[stationId].raininSUM = (dataMap[stationId].raininSUM || 0) + observation.raininAVG;
+                    }
+
+                    if (observation.windspeedMAX !== undefined) {
+                        dataMap[stationId].windgustMaxColor = getWindSpeedColor(observation.windspeedMAX * 3.6);
+                    }
+
+                    dataMap[stationId].last_updated = new Date(observation.time).getTime(); // Convert ISO string to timestamp if needed
+                });
+
+                // Convert toFixed after calculating min/max
+                if (dataMap[stationId].tempMAX !== undefined) {
+                    dataMap[stationId].tempMAX = dataMap[stationId].tempMAX.toFixed(1);
+                    dataMap[stationId].tempMaxColor = getTemperatureColor(dataMap[stationId].tempMAX);
                 }
 
-                if (dataMap[stationId].tempMIN < -30)
-                    dataMap[stationId].tempMIN = 0;
-            }
+                if (dataMap[stationId].tempMIN !== undefined) {
+                    dataMap[stationId].tempMIN = dataMap[stationId].tempMIN.toFixed(1);
+                    dataMap[stationId].tempMinColor = getTemperatureColor(dataMap[stationId].tempMIN);
+                }
+
+                           
+                if (dataMap[stationId].windspeedMAX !== undefined) {
+                    dataMap[stationId].windspeedMAX = (dataMap[stationId].windspeedMAX ).toFixed(1);
+                    dataMap[stationId].windgustMaxColor = getWindSpeedColor(dataMap[stationId].windspeedMAX  ) ;
+                }
+
+                if (dataMap[stationId].windgustMAX !== undefined) {
+                    dataMap[stationId].windgustMAX = (dataMap[stationId].windspeedMAX).toFixed(1);
+                    dataMap[stationId].windgustMaxColor = getWindSpeedColor(dataMap[stationId].windspeedMAX  );
+                }
+            });
         });
 
-
-        return Object.values(dataMap).filter(item => item && item.temp !== undefined && item.stationName);//.sort((a, b) => a.temp - b.temp);
+        return Object.values(dataMap).filter(item => item && item.temp !== undefined && item.stationName);
     }
+
+
+
     function transformWUData(currentData, dayData) {
 
         if (!currentData || !currentData.observations || currentData.observations.length === 0) {
@@ -535,14 +565,14 @@ function App() {
                                 backgroundColor: item.tempMaxColor ? item.tempMaxColor.backgroundColor : '#FFFFFF',
                                 color: item.tempMaxColor ? item.tempMaxColor.color : '#000000'
                             }}>
-                                {item.tempMAX || '0'}
+                                {item.tempMAX || '-'}
                             </td>
 
                             <td style={{
                                 backgroundColor: item.tempMinColor ? item.tempMinColor.backgroundColor : '#FFFFFF',
                                 color: item.tempMinColor ? item.tempMinColor.color : '#000000'
                             }}>
-                                {item.tempMIN || '0'}
+                                {item.tempMIN || '-'}
                             </td>
 
 
