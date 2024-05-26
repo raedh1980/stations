@@ -41,7 +41,8 @@ const stationMapping = {
     "IALQUW1":"ابو علندا",
     "IALJAM4": "الكوم",
     "vsdur950": "الجندويل",
-    "piqvi310":"شفابدران"
+    "piqvi310": "شفابدران",
+    "mkcef941":"الكرامة"
 };
  
 
@@ -208,8 +209,6 @@ function App() {
         return sortableItems;
     };
 
-
-
     useEffect(() => {
         const fetchData = async () => {
 
@@ -247,11 +246,11 @@ function App() {
             const wuDaily6 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId6}&format=json&units=m&apiKey=${apiKey6}&numericPrecision=decimal`;
 
             // Original URL
-            const apiUrl = 'https://stations.arabiaweather.com/wsquery/query/multiQuerylatlonOffset?country=JO&range=0d:now&attrib=temp.max,temp.min,windspeed.max,windgust.max,baromin.max,baromin.min,baromin.avg,rainin.sum&latlon=31.890383,35.896030' ;
+            const apiUrl = 'https://stations.arabiaweather.com/wsquery/query/multiQuerylatlonOffset?country=JO&range=0d:now&attrib=temp.max,temp.min,windspeed.max,windgust.max,baromin.max,baromin.min,baromin.avg,rainin.sum&latlon=31.890383,35.896030';
             const apiUrl2 = 'https://stations.arabiaweather.com/wsquery/query/multiQuerylatlonOffset?country=JO&range=1d:now&attrib=temp.max,temp.min,windspeed.max,windgust.max,baromin.max,baromin.min,baromin.avg,rainin.sum&latlon=31.890383,35.896030';
 
             // With corsproxy.io
-            const proxiedUrl = 'https://corsproxy.io/?' + encodeURIComponent(apiUrl) +  Date.now();
+            const proxiedUrl = 'https://corsproxy.io/?' + encodeURIComponent(apiUrl) + Date.now();
             const proxiedUrl2 = 'https://corsproxy.io/?' + encodeURIComponent(apiUrl2) + Date.now();
 
 
@@ -275,8 +274,8 @@ function App() {
                 ]);
 
 
-   
-                const wuData = transformWUData(wuResult.data,daily1.data);
+
+                const wuData = transformWUData(wuResult.data, daily1.data);
                 const wuData2 = transformWUData(wuResult2.data, daily2.data);
                 const wuData3 = transformWUData(wuResult3.data, daily3.data);
                 const wuData4 = transformWUData(wuResult4.data, daily4.data);
@@ -284,8 +283,8 @@ function App() {
                 const wuData6 = transformWUData(wuResult6.data, daily6.data);
 
 
-         
-            
+
+
 
 
                 // Combine and process all data
@@ -307,7 +306,7 @@ function App() {
         fetchData();
     }, []);
 
- 
+
 
     function mergeData(arabiaWeatherData, statsData, statsData2) {
         let dataMap = {};
@@ -321,7 +320,7 @@ function App() {
                 ...dataMap[stationId],
                 ...details,
                 stationName: stationMapping[stationId],
-                temp:  details.temp ? details.temp.toFixed(1) : undefined,
+                temp: details.temp ? details.temp.toFixed(1) : undefined,
 
                 windspeed: details.windspeed ? (details.windspeed * 3.6).toFixed(1) : undefined,  // Converting and fixing the precision
                 windgust: details.windgust ? (details.windgust * 3.6).toFixed(1) : undefined,
@@ -344,7 +343,7 @@ function App() {
                     ...dataMap[stationId],
                     tempMAX: record.tempMAX ? record.tempMAX.toFixed(1) : undefined,
                     tempMIN: record.tempMIN ? record.tempMIN.toFixed(1) : undefined,
-                        
+
                     windspeedMAX: (record.windspeedMAX * 3.6).toFixed(1),
                     windgustMAX: (record.windgustMAX * 3.6).toFixed(1),
                     barominMAX: record.barominMAX,
@@ -370,7 +369,7 @@ function App() {
                     };
                 }
 
-                
+
 
                 // Update tempMIN only if it is less than the existing tempMIN in statsData
                 if (dataMap[stationId].tempMIN === undefined || record.tempMIN < dataMap[stationId].tempMIN) {
