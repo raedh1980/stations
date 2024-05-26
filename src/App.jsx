@@ -357,11 +357,12 @@ function App() {
                 }
 
                 record.forEach(observation => {
-                    if (observation.tempMAX !== undefined) {
+                    // Exclude temperature spikes
+                    if (observation.tempMAX !== undefined && observation.tempMAX <= 60) {
                         dataMap[stationId].tempMAX = Math.max(dataMap[stationId].tempMAX || -Infinity, observation.tempMAX);
                     }
 
-                    if (observation.tempMIN !== undefined) {
+                    if (observation.tempMIN !== undefined && observation.tempMIN >= -50) {
                         dataMap[stationId].tempMIN = Math.min(dataMap[stationId].tempMIN || Infinity, observation.tempMIN);
                     }
 
