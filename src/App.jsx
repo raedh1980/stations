@@ -187,7 +187,7 @@ function getTemperatureColor(value) {
 
     } else if (value > 39 && value < 40) {
         return { backgroundColor: '#5E0000', color: '#FFFFFF' }; // Near black
-
+           
     } else if (value >= 40 && value <= 42) {
         return { backgroundColor: '#a60303', color: '#FFFFFF' }; // Near black
 
