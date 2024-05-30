@@ -435,7 +435,6 @@ function App() {
 
 
     function transformWUData(currentData, dayData) {
-
         if (!currentData || !currentData.observations || currentData.observations.length === 0) {
             console.log("No current data available or station is offline");
             return []; // Return an empty array if no current data is available
@@ -448,27 +447,61 @@ function App() {
         const currentObservation = currentData.observations[0];
         const dayObservations = dayData.observations;
 
-        // Compute max and min temperatures and wind gusts from the day data
-        const tempMax = Math.max(...dayObservations.map(obs => obs.metric.tempHigh));
-        const tempMin = Math.min(...dayObservations.map(obs => obs.metric.tempLow));
-        const windGustMax = Math.max(...dayObservations.map(obs => obs.metric.windgustHigh));
+        // Function to filter out spikes and invalid values
+        const filterSpikes = (obs) => {
+            return obs.filter(data =>
+                data.metric.tempHigh < 60 && data.metric.tempHigh > -50 &&
+                data.metric.tempLow < 60 && data.metric.tempLow > -50 &&
+                data.metric.windgustHigh < 200 && data.metric.windgustHigh > 0 &&
+                data.metric.tempLow !== null && data.metric.tempLow !== undefined
+            );
+        };
 
+        // Filter out spikes and invalid values from day observations
+        const filteredObservations = filterSpikes(dayObservations);
+
+        // Log filtered observations for debugging
+        console.log("Filtered Observations:", filteredObservations.map(obs => ({
+            tempHigh: obs.metric.tempHigh,
+            tempLow: obs.metric.tempLow,
+            windgustHigh: obs.metric.windgustHigh
+        })));
+
+        // Ensure filteredObservations is not empty
+        if (filteredObservations.length === 0) {
+            console.log("All observations filtered out due to spikes or invalid values.");
+            return [];
+        }
+
+        
+        // Compute max temperature and wind gust from the filtered day data
+        const tempMax = Math.max(...filteredObservations.map(obs => obs.metric.tempHigh));
+        const windGustMax = Math.max(...filteredObservations.map(obs => obs.metric.windgustHigh));
+
+        // Manually find the minimum temperature
+        let tempMin = Infinity;
+        filteredObservations.forEach(obs => {
+            if (obs.metric.tempLow < tempMin && obs.metric.tempLow !== null && obs.metric.tempLow !== undefined) {
+                tempMin = obs.metric.tempLow;
+            }
+        });
+
+        // Ensure tempMin is valid 
+        tempMin = tempMin === Infinity ? undefined : tempMin;
+
+     
 
         var last5minrain = 0.0;
         // Ensure the observations are sorted by time
-        if (dayData.observations.length >= 2) {
+        if (filteredObservations.length >= 2) {
             var latestObservation = currentData;
-            var observationOne5MinAgo = dayData.observations[dayData.observations.length - 2];
+            var observationOne5MinAgo = filteredObservations[filteredObservations.length - 2];
 
             if (latestObservation != null && observationOne5MinAgo != null) {
                 last5minrain = latestObservation.observations[0].metric.precipTotal - observationOne5MinAgo.metric.precipTotal;
                 last5minrain = last5minrain >= 0 ? last5minrain : 0; // Ensure no negative values
             }
-
-
         }
-
-
 
         return [{
             stationName: stationMapping[currentObservation.stationID], // Assuming mapping exists
@@ -481,7 +514,7 @@ function App() {
             windspeedColor: getWindSpeedColor(currentObservation.metric.windSpeed),
             windgustColor: getWindSpeedColor(currentObservation.metric.windGust),
             dailyrain: currentObservation.metric.precipTotal.toFixed(1),
-            rainin: (last5minrain * 4.7).toFixed(1),// currentObservation.metric.precipRate.toFixed(1),
+            rainin: (last5minrain * 4.7).toFixed(1), // currentObservation.metric.precipRate.toFixed(1),
             rainRateColor: getRainRateColor(currentObservation.metric.precipRate),
             totalRainColor: getRainTotalColor(currentObservation.metric.precipTotal),
             tempMAX: tempMax, // Converting to Celsius
@@ -491,10 +524,8 @@ function App() {
             windgustMAX: windGustMax, // Converting to km/h
             windspeedMAX: windGustMax,
             windgustMaxColor: getWindSpeedColor(windGustMax),
-
             last_updated: currentObservation.obsTimeUtc
         }];
-
     }
 
 
