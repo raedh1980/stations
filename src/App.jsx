@@ -22,7 +22,7 @@ const stationMapping = {
     "jlqpp220": "ام السماق",
     "tnhkw851": "تلاع العلي",
     "latxr924": "جبل اللويبدة",
-    "zpzih551": "ام السماق",
+    "zzidi409": "ام السماق",
     "emdtr434": "الهاشمي",
     "cgofb280": "غمدان",
     "smwoo943": "مأدبا",
@@ -402,6 +402,12 @@ function App() {
                         dataMap[stationId].windgustMaxColor = getWindSpeedColor(observation.windspeedMAX * 3.6);
                     }
 
+
+
+                    if (observation.humidityMAX !== undefined) {
+                        dataMap[stationId].humidityMaxColor = getWindSpeedColor(observation.humidityMAX );
+                    }
+
                     dataMap[stationId].last_updated = new Date(observation.time).getTime(); // Convert ISO string to timestamp if needed
                 });
 
@@ -453,6 +459,7 @@ function App() {
                 data.metric.tempHigh < 60 && data.metric.tempHigh > -50 &&
                 data.metric.tempLow < 60 && data.metric.tempLow > -50 &&
                 data.metric.windgustHigh < 200 && data.metric.windgustHigh > 0 &&
+                data.humidityHigh <= 100 && data.humidityHigh >= 0 &&
                 data.metric.tempLow !== null && data.metric.tempLow !== undefined
             );
         };
@@ -460,23 +467,22 @@ function App() {
         // Filter out spikes and invalid values from day observations
         const filteredObservations = filterSpikes(dayObservations);
 
-        // Log filtered observations for debugging
-        console.log("Filtered Observations:", filteredObservations.map(obs => ({
-            tempHigh: obs.metric.tempHigh,
-            tempLow: obs.metric.tempLow,
-            windgustHigh: obs.metric.windgustHigh
-        })));
-
         // Ensure filteredObservations is not empty
         if (filteredObservations.length === 0) {
             console.log("All observations filtered out due to spikes or invalid values.");
             return [];
         }
+ 
+        // Filter out invalid humidityHigh values explicitly
+        const validHumidityHighValues = filteredObservations
+            .map(obs => obs.humidityHigh)
+            .filter(value => value !== null && value !== undefined && !isNaN(value));
 
-        
-        // Compute max temperature and wind gust from the filtered day data
+         
+        // Compute max temperature, humidity, and wind gust from the filtered day data
         const tempMax = Math.max(...filteredObservations.map(obs => obs.metric.tempHigh));
         const windGustMax = Math.max(...filteredObservations.map(obs => obs.metric.windgustHigh));
+        const humidityMax = Math.max(...validHumidityHighValues);
 
         // Manually find the minimum temperature
         let tempMin = Infinity;
@@ -486,10 +492,8 @@ function App() {
             }
         });
 
-        // Ensure tempMin is valid 
+        // Ensure tempMin is valid
         tempMin = tempMin === Infinity ? undefined : tempMin;
-
-     
 
         var last5minrain = 0.0;
         // Ensure the observations are sorted by time
@@ -513,7 +517,7 @@ function App() {
             tempColor: getTemperatureColor(currentObservation.metric.temp),
             windspeedColor: getWindSpeedColor(currentObservation.metric.windSpeed),
             windgustColor: getWindSpeedColor(currentObservation.metric.windGust),
-            dailyrain: currentObservation.metric.precipTotal.toFixed(1),
+            dailyrain: currentObservation.metric.precipTotal.toFixed(1), 
             rainin: (last5minrain * 4.7).toFixed(1), // currentObservation.metric.precipRate.toFixed(1),
             rainRateColor: getRainRateColor(currentObservation.metric.precipRate),
             totalRainColor: getRainTotalColor(currentObservation.metric.precipTotal),
@@ -524,9 +528,14 @@ function App() {
             windgustMAX: windGustMax, // Converting to km/h
             windspeedMAX: windGustMax,
             windgustMaxColor: getWindSpeedColor(windGustMax),
+            humidityMAX: humidityMax, // Adding humidityMax
+            humidityMAXColor: getWindSpeedColor(humidityMax),
             last_updated: currentObservation.obsTimeUtc
         }];
     }
+
+
+
 
 
 
@@ -551,6 +560,8 @@ function App() {
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'tempMAX', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>العظمى</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'tempMIN', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الصغرى</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'windspeedMAX', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>اعلى هبة</th>
+                        <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'humidityMAX', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>اعلى رطوبة</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -609,6 +620,9 @@ function App() {
 
 
                             <td style={{ backgroundColor: item.windgustMaxColor }}>{item.windspeedMAX || '-'} كم</td>
+
+
+                            <td >{item.humidityMAX || '-'} </td>
 
                         </tr>
                     ))}
