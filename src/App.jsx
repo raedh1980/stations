@@ -578,10 +578,10 @@ function App() {
 
 
                             <td>{item.humidity || '-'}%</td>
-                            <td style={{ backgroundColor: item.windspeedColor }}>{item.windspeed || '-'} كم</td>
+                            <td style={{ backgroundColor: item.windspeedColor }}>{item.windspeed || '-'}</td>
 
                             <td>{item.windDirection || '-'}</td>
-                            <td style={{ backgroundColor: item.windgustColor }}>{item.windgust || '-'} كم</td>
+                            <td style={{ backgroundColor: item.windgustColor }}>{item.windgust || '-'}</td>
 
 
                             <td style={{
