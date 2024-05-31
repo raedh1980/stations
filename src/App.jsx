@@ -40,7 +40,6 @@ const stationMapping = {
     "IALJAM3": "تلاع - زياد",
     "IALQUW1": "ابو علندا",
     "IALJAM4": "الكوم",
-    "vsdur950": "الجندويل",
     "piqvi310": "شفابدران",
     "mkcef941": "الكرامة"
 };
@@ -130,6 +129,36 @@ function getRainTotalColor(totalRain) {
         ];
         const defaultStyle = { backgroundColor: '#FFFFFF', fontColor: '#000000' };
         const range = ranges.find(r => totalRain >= r.min && totalRain < r.max);
+
+        return range ? { backgroundColor: range.color, color: range.fontColor } : defaultStyle;
+    }
+
+}
+
+function getRHColor(RH) {
+
+    if (RH) {
+        const ranges = [
+
+            { min: 0, max: 10, color: '#E0FFFF', fontColor: '#000000' },  // Pale blue
+
+            { min: 10, max: 20, color: '#1E90FF', fontColor: '#FFFFFF' }, // Soft teal
+            { min: 20, max: 30, color: '#00BFFF', fontColor: '#FFFFFF' },// Light green
+
+            { min: 30, max: 40, color: '#4CC417', fontColor: '#FFFFFF' },// Light yellow
+            { min: 40, max: 50, color: '#00FF00', fontColor: '#000000' },// Yellow32CD32
+
+            { min: 50, max: 60, color: '#ADFF2F', fontColor: '#000000' },// Orange00FF00
+            { min: 60, max: 70, color: '#BDF516', fontColor: '#000000' },// Deep coral
+
+            { min: 70, max: 80, color: '#E2F516', fontColor: '#000000' },// Reddish orange
+            { min: 80, max: 89, color: '#FFFF33', fontColor: '#000000' },// Reddish orange
+            { min: 90, max: 100, color: '#FEF250', fontColor: '#FFFFFF' },// Red
+        
+
+        ];
+        const defaultStyle = { backgroundColor: '#FFFFFF', fontColor: '#000000' };
+        const range = ranges.find(r => RH >= r.min && RH < r.max);
 
         return range ? { backgroundColor: range.color, color: range.fontColor } : defaultStyle;
     }
@@ -332,8 +361,11 @@ function App() {
             dataMap[stationId] = {
                 ...dataMap[stationId],
                 ...details,
+
                 stationName: stationMapping[stationId],
                 temp: details.temp ? details.temp.toFixed(1) : undefined,
+                dailyrain: details.dailyrain ? details.dailyrain.toFixed(1) : undefined,
+
                 windspeed: details.windspeed ? (details.windspeed * 3.6).toFixed(1) : undefined,
                 windgust: details.windgust ? (details.windgust * 3.6).toFixed(1) : undefined,
                 windDirection: degreesToCardinalDetailed(details.winddir),
@@ -402,12 +434,7 @@ function App() {
                         dataMap[stationId].windgustMaxColor = getWindSpeedColor(observation.windspeedMAX * 3.6);
                     }
 
-
-
-                    if (observation.humidityMAX !== undefined) {
-                        dataMap[stationId].humidityMaxColor = getWindSpeedColor(observation.humidityMAX );
-                    }
-
+                                     
                     dataMap[stationId].last_updated = new Date(observation.time).getTime(); // Convert ISO string to timestamp if needed
                 });
 
@@ -432,6 +459,8 @@ function App() {
                     dataMap[stationId].windgustMAX = (dataMap[stationId].windspeedMAX).toFixed(1);
                     dataMap[stationId].windgustMaxColor = getWindSpeedColor(dataMap[stationId].windspeedMAX  );
                 }
+
+              
             });
         });
 
@@ -529,7 +558,7 @@ function App() {
             windspeedMAX: windGustMax,
             windgustMaxColor: getWindSpeedColor(windGustMax),
             humidityMAX: humidityMax, // Adding humidityMax
-            humidityMAXColor: getWindSpeedColor(humidityMax),
+            humidityMAXColor: getRHColor(humidityMax),
             last_updated: currentObservation.obsTimeUtc
         }];
     }
@@ -560,7 +589,7 @@ function App() {
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'tempMAX', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>العظمى</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'tempMIN', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الصغرى</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'windspeedMAX', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>اعلى هبة</th>
-                        <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'humidityMAX', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>اعلى رطوبة</th>
+                        <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'humidityMAX', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>رطوبة</th>
 
                     </tr>
                 </thead>
@@ -621,8 +650,8 @@ function App() {
 
                             <td style={{ backgroundColor: item.windgustMaxColor }}>{item.windspeedMAX || '-'} كم</td>
 
-
-                            <td >{item.humidityMAX || '-'} </td>
+                            
+                            <td style={{ backgroundColor: item.humidityMAXColor }}>{item.humidityMAX || '-'} </td>
 
                         </tr>
                     ))}
