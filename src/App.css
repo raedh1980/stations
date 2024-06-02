@@ -63,6 +63,9 @@ th, td {
 .rtl-table td {
     cursor: pointer;
 }
+    
+
+
 
     .rtl-table th.sorted-asc::after {
         content: " ▲";
