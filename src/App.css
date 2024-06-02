@@ -14,13 +14,13 @@ html, body {
 
 th, td {
     border: 1px solid #ddd; /* Optional: adds border for clarity */
-    padding: 10px;
+ 
 }
 
 .rtl-table {
     font-size: 18px;
     width: 100%; /* Force the table to be 100% width */
-    height: 100%; /* Force the table to be 100% height */
+    height: 80%; /* Force the table to be 100% height */
     max-width: none; /* Remove any max width restriction */
     font-family: Calibri;
     font-weight: bold;
@@ -75,10 +75,10 @@ th, td {
 /* Ensure the table is responsive on mobile devices */
 @media (max-width: 768px) {
     .rtl-table {
-        font-size: 14px; /* Slightly reduce font size on smaller screens */
+        font-size: 12px; /* Slightly reduce font size on smaller screens */
     }
 
     th, td {
-        padding: 8px; /* Adjust padding for smaller screens */
+        padding: 5px; /* Adjust padding for smaller screens */
     }
 }
