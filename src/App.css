@@ -1,81 +1,55 @@
-﻿html, body {
-    height: 100%; /* Ensure the html and body take full height */
-    margin: 0; /* Remove default margin */
-    padding: 0; /* Remove default padding */
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh; /* Make container take full viewport height */
-    width: 100%; /* Ensure the container takes the full width */
-}
-
-.table-wrapper {
-    flex-grow: 1; /* Allow table wrapper to grow and fill the container */
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%; /* Ensure the table wrapper takes the full width */
-}
-
-.table-content {
-    flex-grow: 1; /* Allow table content to grow and fill the table wrapper */
-    overflow: auto; /* Add scroll if content overflows */
-}
-
-.rtl-table {
-    width: 100%; /* Force the table to be 100% width */
-    height: 100%; /* Force the table to be 100% height */
-    max-width: none; /* Remove any max width restriction */
-    font-family: Calibri;
-    font-weight: bold;
-    direction: rtl;
-    border-collapse: collapse; /* Collapses borders between table cells */
-    border: 1px solid #ccc; /* Adds a border around the table */
+﻿@media (max-width: 1020px) {
+    body, .container {
+        width: 1020px; /* Force the width to be 1024px on all devices */
+        overflow-x: visible; /* Allow horizontal scrolling */
+    }
 }
 
 th, td {
     border: 1px solid #ddd; /* Optional: adds border for clarity */
+
     padding: 10px;
-    white-space: nowrap; /* Prevent text from wrapping */
-    overflow: hidden; /* Hide overflow text */
-    text-overflow: ellipsis; /* Show ellipsis for overflow text */
-    font-size: 20px; /* Default font size for desktop */
 }
 
-.rtl-table th,
-.rtl-table td {
-    border: 3px solid #ccc; /* Light grey border for readability */
-    text-align: center;
+
+
+
+
+.rtl-table {
+    font-size: 17px;
+    max-width: 1024; /* Or set a maximum width */
+    float: right;
+    font-family: Calibri;
+    font-weight: bold;
+    direction: rtl;
+    border-collapse: collapse; /* Collapses borders between table cells */
+
+
+    border: 1px solid #ccc; /* Adds a border around the table */
 }
 
-.rtl-table th {
-    background-color: #f9f9f9; /* Light background for headers */
-    color: #333; /* Darker text for contrast */
-}
 
-.rtl-table th,
-.rtl-table td {
-    cursor: pointer;
-}
-
-    .rtl-table th.sorted-asc::after {
-        content: " ▲";
+    .rtl-table th,
+    .rtl-table td {
+        border: 3px solid #ccc; /* Light grey border for readability */
+        padding: 5px; /* Adds space around text in each cell */
+        text-align: center;
     }
 
-    .rtl-table th.sorted-desc::after {
-        content: " ▼";
+    .rtl-table th {
+        background-color: #f9f9f9; /* Light background for headers */
+        color: #333; /* Darker text for contrast */
     }
 
-/* Ensure the table is responsive on mobile devices */
-@media (max-width: 768px) {
-    .rtl-table {
-        font-size: 14px; /* Reduce font size on smaller screens */
+    .rtl-table th,
+    .rtl-table td {
+        cursor: pointer;
     }
 
-    th, td {
-        padding: 8px; /* Adjust padding for smaller screens */
-        font-size: 12px; /* Further reduce font size for very small screens */
-    }
-}
+        .rtl-table th.sorted-asc::after {
+            content: " ▲";
+        }
+
+        .rtl-table th.sorted-desc::after {
+            content: " ▼";
+        }

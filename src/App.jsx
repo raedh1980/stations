@@ -579,7 +579,7 @@ function App() {
             <table className="rtl-table" >
                 <thead><tr><th>اخر تحديث: {lastUpdateTime}</th></tr>
                     <tr>
-                        <th>المحطة</th>
+                        <th >المحطة</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'temp', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الحرارة</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'humidity', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الرطوبة</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'windspeed', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الرياح</th>
