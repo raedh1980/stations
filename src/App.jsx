@@ -650,7 +650,7 @@ function App() {
                             </td>
 
 
-                            <td style={{ backgroundColor: item.windgustMaxColor }}>{item.windspeedMAX || '-'} كم</td>
+                            <td style={{ backgroundColor: item.windgustMaxColor }}>{item.windspeedMAX || '-'}</td>
 
                             
                             <td style={{ backgroundColor: item.humidityMAXColor }}>{item.humidityMAX || '-'} </td>
