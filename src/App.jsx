@@ -208,11 +208,15 @@ function getTemperatureColor(value) {
     else if (value > 32 && value <= 34) {
         return { backgroundColor: '#fa1414', color: '#FFFFFF' }; // Plum
     }
-    else if (value > 34 && value <= 37) {
-        return { backgroundColor: '#e60909', color: '#FFFFFF' }; // Plum
+    else if (value > 34 && value <= 36) {
+        return { backgroundColor: '#fa1414', color: '#FFFFFF' }; // Plum
+    }
 
-    } else if (value > 37 && value <= 39.9 ) {
-        return { backgroundColor: '#960000', color: '#FFFFFF' }; // Dark plum
+    else if (value > 36 && value <= 38) {
+        return { backgroundColor: '#b30000', color: '#FFFFFF' }; // Plum
+
+    } else if (value > 38 && value <  40 ) {
+        return { backgroundColor: '#800000', color: '#FFFFFF' }; // Dark plum
 
     } else if (value >= 40 && value < 42) {
         return { backgroundColor: '#5E0000', color: '#FFFFFF' }; // Near black
