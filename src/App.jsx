@@ -211,20 +211,20 @@ function getTemperatureColor(value) {
     else if (value > 34 && value <= 37) {
         return { backgroundColor: '#e60909', color: '#FFFFFF' }; // Plum
 
-    } else if (value > 37 && value <= 39 ) {
+    } else if (value > 37 && value <= 39.9 ) {
         return { backgroundColor: '#960000', color: '#FFFFFF' }; // Dark plum
 
-    } else if (value > 39 && value < 40) {
+    } else if (value >= 40 && value < 42) {
         return { backgroundColor: '#5E0000', color: '#FFFFFF' }; // Near black
            
-    } else if (value >= 40 && value <= 42) {
-        return { backgroundColor: '#a60303', color: '#FFFFFF' }; // Near black
+    } else if (value >= 42 && value <= 44) {
+        return { backgroundColor: '#660000', color: '#FFFFFF' }; // Near black
 
-    } else if (value > 42 && value <= 44) {
-        return { backgroundColor: '#8f0404', color: '#FFFFFF' }; // Near black
+    } else if (value > 44 && value <= 46) {
+        return { backgroundColor: '#4d0000', color: '#FFFFFF' }; // Near black
 
-    } else if (value > 44) {
-        return { backgroundColor: '#4d0202', color: '#FFFFFF' }; // Near black
+    } else if (value > 46) {
+        return { backgroundColor: '#330000', color: '#FFFFFF' }; // Near black
 
      } else {
         return { backgroundColor: '#FFFFFF', color: '#000000' }; // Default for out of range
