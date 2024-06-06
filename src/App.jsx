@@ -17,7 +17,7 @@ const stationMapping = {
     "qxyne738": "المفرق",
     "jhcbn486": "سحاب",
     "nztkq622": "عجلون",
-    "jixdw557": "المقابلين",
+    "jixdw557": "البنيات",
     "jmwgr490": "جبل عمان",
     "jlqpp220": "ام السماق",
     "tnhkw851": "تلاع العلي",
@@ -199,11 +199,8 @@ function getTemperatureColor(value) {
     } else if (value > 28 && value < 30) {
         return { backgroundColor: '#DF6D14', color: '#000000' }; // Dark red
     }
-
     else if (value >= 30 && value <= 32) {
         return { backgroundColor: '#ff3b3b', color: '#FFFFFF' }; // Burgundy
-
-
     }
     else if (value > 32 && value <= 34) {
         return { backgroundColor: '#fa1414', color: '#FFFFFF' }; // Plum
