@@ -483,7 +483,7 @@ function App() {
 
 
 
-    function transformWUData(currentData, dayData) {
+ function transformWUData(currentData, dayData) {
         if (!currentData || !currentData.observations || currentData.observations.length === 0) {
             console.log("No current data available or station is offline");
             return []; // Return an empty array if no current data is available
@@ -522,15 +522,19 @@ function App() {
         // Compute max temperature, humidity, and wind gust from the filtered day data
         const tempMax = Math.max(...filteredObservations.map(obs => obs.metric.tempHigh));
         const windGustMax = Math.max(...filteredObservations.map(obs => obs.metric.windgustHigh));
-        const humidityMax = Math.max(...validHumidityHighValues);
+        let humidityMax = Math.max(...validHumidityHighValues);
 
 
         // Compute min temperature using Math.min and a spread operator with filtering
-        const tempMin = Math.min(
+        let tempMin = Math.min(
             ...filteredObservations
                 .map(obs => obs.metric.tempLow)
                 .filter(tempLow => tempLow !== null && tempLow !== undefined)
         );
+
+     // Return null if tempMin is Infinity
+        tempMin = tempMin === Infinity ? 0 : tempMin;
+        humidityMax = humidityMax === -Infinity ? 0 : humidityMax;
 
         var last5minrain = 0.0;
         // Ensure the observations are sorted by time
@@ -570,7 +574,7 @@ function App() {
             last_updated: currentObservation.obsTimeUtc
         }];
     }
-
+   
 
 
 
