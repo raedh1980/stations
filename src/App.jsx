@@ -500,15 +500,12 @@ function App() {
         const filterSpikes = (obs) => {
             return obs.filter(data =>
                 data.metric.tempHigh < 60 && data.metric.tempHigh > -50 &&
-                data.metric.tempLow < 60 && data.metric.tempLow > -50 &&
-                data.metric.windgustHigh < 200 && data.metric.windgustHigh > 0 &&
-                data.humidityHigh <= 100 && data.humidityHigh >= 0 &&
-                data.metric.tempLow !== null && data.metric.tempLow !== undefined
+                data.metric.tempLow < 60 && data.metric.tempLow > -50 
             );
         };
 
         // Filter out spikes and invalid values from day observations
-        const filteredObservations = filterSpikes(dayObservations);
+        const filteredObservations =  filterSpikes(dayObservations);
 
         // Ensure filteredObservations is not empty
         if (filteredObservations.length === 0) {
@@ -527,16 +524,13 @@ function App() {
         const windGustMax = Math.max(...filteredObservations.map(obs => obs.metric.windgustHigh));
         const humidityMax = Math.max(...validHumidityHighValues);
 
-        // Manually find the minimum temperature
-        let tempMin = Infinity;
-        filteredObservations.forEach(obs => {
-            if (obs.metric.tempLow < tempMin && obs.metric.tempLow !== null && obs.metric.tempLow !== undefined) {
-                tempMin = obs.metric.tempLow;
-            }
-        });
 
-        // Ensure tempMin is valid
-        tempMin = tempMin === Infinity ? undefined : tempMin;
+        // Compute min temperature using Math.min and a spread operator with filtering
+        const tempMin = Math.min(
+            ...filteredObservations
+                .map(obs => obs.metric.tempLow)
+                .filter(tempLow => tempLow !== null && tempLow !== undefined)
+        );
 
         var last5minrain = 0.0;
         // Ensure the observations are sorted by time
