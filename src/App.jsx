@@ -17,7 +17,6 @@ const stationMapping = {
     "qxyne738": "المفرق",
     "jhcbn486": "سحاب",
     "nztkq622": "عجلون",
-    "jixdw557": "البنيات",
     "jmwgr490": "جبل عمان",
     "jlqpp220": "ام السماق",
     "tnhkw851": "تلاع العلي",
@@ -366,19 +365,19 @@ function App() {
     function mergeData(arabiaWeatherData, statsDataArray) {
         let dataMap = {};
 
+        // Process arabiaWeatherData
         arabiaWeatherData.forEach(item => {
             const stationId = Object.keys(item)[0];
             const details = item[stationId];
 
-        
-
+            // Initialize or update the dataMap with station data
             dataMap[stationId] = {
                 ...dataMap[stationId],
                 ...details,
 
                 stationName: stationMapping[stationId],
                 temp: details.temp ? details.temp.toFixed(1) : undefined,
-                dailyrain: details.dailyrain ? details.dailyrain: undefined,
+                dailyrain: details.dailyrain ? details.dailyrain : undefined,
 
                 windspeed: details.windspeed ? (details.windspeed * 3.6).toFixed(1) : undefined,
                 windgust: details.windgust ? (details.windgust * 3.6).toFixed(1) : undefined,
@@ -391,6 +390,7 @@ function App() {
             };
         });
 
+        // Process statsDataArray
         statsDataArray.forEach(({ stationId, data }) => {
             if (!data.length) {
                 console.warn('No data for station:', stationId);
@@ -410,7 +410,6 @@ function App() {
                     if (observation.tempMIN !== undefined && observation.tempMIN >= -50 && observation.tempMIN <= 60) {
                         dataMap[stationId].tempMIN = Math.min(dataMap[stationId].tempMIN || Infinity, observation.tempMIN);
                     }
-
 
                     if (observation.humidityMAX !== undefined) {
                         dataMap[stationId].humidityMAX = Math.max(dataMap[stationId].humidityMAX || -Infinity, observation.humidityMAX);
@@ -448,7 +447,6 @@ function App() {
                         dataMap[stationId].windgustMaxColor = getWindSpeedColor(observation.windspeedMAX * 3.6);
                     }
 
-                                     
                     dataMap[stationId].last_updated = new Date(observation.time).getTime(); // Convert ISO string to timestamp if needed
                 });
 
@@ -463,18 +461,15 @@ function App() {
                     dataMap[stationId].tempMinColor = getTemperatureColor(dataMap[stationId].tempMIN);
                 }
 
-                           
                 if (dataMap[stationId].windspeedMAX !== undefined) {
-                    dataMap[stationId].windspeedMAX = (dataMap[stationId].windspeedMAX ).toFixed(1);
-                    dataMap[stationId].windgustMaxColor = getWindSpeedColor(dataMap[stationId].windspeedMAX  ) ;
+                    dataMap[stationId].windspeedMAX = dataMap[stationId].windspeedMAX.toFixed(1);
+                    dataMap[stationId].windgustMaxColor = getWindSpeedColor(dataMap[stationId].windspeedMAX);
                 }
 
                 if (dataMap[stationId].windgustMAX !== undefined) {
-                    dataMap[stationId].windgustMAX = (dataMap[stationId].windspeedMAX).toFixed(1);
-                    dataMap[stationId].windgustMaxColor = getWindSpeedColor(dataMap[stationId].windspeedMAX  );
+                    dataMap[stationId].windgustMAX = dataMap[stationId].windgustMAX.toFixed(1);
+                    dataMap[stationId].windgustMaxColor = getWindSpeedColor(dataMap[stationId].windgustMAX);
                 }
-
-              
             });
         });
 
