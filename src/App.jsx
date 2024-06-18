@@ -542,7 +542,6 @@ function App() {
                 last5minrain = last5minrain >= 0 ? last5minrain : 0; // Ensure no negative values
             }
         }
-
         return [{
             stationName: stationMapping[currentObservation.stationID], // Assuming mapping exists
             temp: currentObservation.metric.temp,
@@ -553,8 +552,8 @@ function App() {
             tempColor: getTemperatureColor(currentObservation.metric.temp),
             windspeedColor: getWindSpeedColor(currentObservation.metric.windSpeed),
             windgustColor: getWindSpeedColor(currentObservation.metric.windGust),
-            dailyrain: currentObservation.metric.precipTotal.toFixed(1), 
-            rainin: (last5minrain * 4.7).toFixed(1), // currentObservation.metric.precipRate.toFixed(1),
+            dailyrain: currentObservation.metric.precipTotal !== null ? currentObservation.metric.precipTotal.toFixed(1) : '0.0',
+             rainin: (last5minrain * 4.7).toFixed(1), // currentObservation.metric.precipRate.toFixed(1),
             rainRateColor: getRainRateColor(currentObservation.metric.precipRate),
             totalRainColor: getRainTotalColor(currentObservation.metric.precipTotal),
             tempMAX: tempMax, // Converting to Celsius
