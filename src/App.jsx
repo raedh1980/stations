@@ -363,13 +363,15 @@ function App() {
     }, []);
 
     function mergeData(arabiaWeatherData, statsDataArray) {
+
+
         let dataMap = {};
 
         // Process arabiaWeatherData
         arabiaWeatherData.forEach(item => {
             const stationId = Object.keys(item)[0];
             const details = item[stationId];
-
+         
             // Initialize or update the dataMap with station data
             dataMap[stationId] = {
                 ...dataMap[stationId],
@@ -377,7 +379,7 @@ function App() {
 
                 stationName: stationMapping[stationId],
                 temp: details.temp ? details.temp.toFixed(1) : undefined,
-                dailyrain: details.dailyrain ? details.dailyrain : undefined,
+                dailyrain: details.dailyrain ? (details.dailyrain * 25.4).toFixed(2) : undefined,
 
                 windspeed: details.windspeed ? (details.windspeed * 3.6).toFixed(1) : undefined,
                 windgust: details.windgust ? (details.windgust * 3.6).toFixed(1) : undefined,
