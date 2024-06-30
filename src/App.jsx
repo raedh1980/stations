@@ -40,7 +40,8 @@ const stationMapping = {
     "IALQUW1": "ابو علندا",
     "IALJAM4": "الكوم",
     "piqvi310": "شفابدران",
-    "mkcef941": "الكرامة"
+    "mkcef941": "الكرامة",
+    "jixdw557":"البنيات"
 };
 
 
