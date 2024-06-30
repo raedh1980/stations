@@ -380,7 +380,7 @@ function App() {
 
                 stationName: stationMapping[stationId],
                 temp: details.temp ? details.temp.toFixed(1) : undefined,
-                dailyrain: details.dailyrain ? (details.dailyrain * 25.4).toFixed(2) : undefined,
+                dailyrain: details.dailyrain ? (details.dailyrain).toFixed(2) : undefined,
 
                 windspeed: details.windspeed ? (details.windspeed * 3.6).toFixed(1) : undefined,
                 windgust: details.windgust ? (details.windgust * 3.6).toFixed(1) : undefined,
