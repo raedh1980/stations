@@ -41,7 +41,8 @@ const stationMapping = {
     "IALJAM4": "الكوم",
     "piqvi310": "شفابدران",
     "mkcef941": "الكرامة",
-    "jixdw557":"البنيات"
+    "jixdw557": "البنيات",
+     "IBEITY7": "بيت لحم"
 };
 
 
@@ -301,6 +302,13 @@ function App() {
 
 
 
+            const apiKey8 = '9758586d0425493998586d0425593903'; // Weather Underground API Key
+            const stationId8 = 'IBEITY7'; // Weather Underground Station ID
+            const wuUrl8 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId8}&format=json&units=m&apiKey=${apiKey8}&numericPrecision=decimal`;
+            const wuDaily8 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId8}&format=json&units=m&apiKey=${apiKey8}&numericPrecision=decimal`;
+
+
+
             // Filter out stations starting with IA and IJ
             const filteredStationList = Object.keys(stationMapping).filter(id => !id.startsWith('IA') && !id.startsWith('IJ'));
 
@@ -317,7 +325,7 @@ function App() {
             });
 
             try {
-                const [arabiaWeatherResult, wuResult, wuResult2, wuResult3, wuResult4, wuResult5, wuResult6, wuResult7,daily1, daily2, daily3, daily4, daily5, daily6,daily7,    ...statsResults] = await Promise.all([
+                const [arabiaWeatherResult, wuResult, wuResult2, wuResult3, wuResult4, wuResult5, wuResult6, wuResult7, wuResult8, daily1, daily2, daily3, daily4, daily5, daily6, daily7, daily8,   ...statsResults] = await Promise.all([
                     axios('https://stations.arabiaweather.com/weatherstation/api/get?ws=*&attr=*'),
                     axios.get(wuUrl),
                     axios.get(wuUrl2),
@@ -326,6 +334,7 @@ function App() {
                     axios.get(wuUrl5),
                     axios.get(wuUrl6),
                     axios.get(wuUrl7),
+                    axios.get(wuUrl8),
                     axios.get(wuDaily),
                     axios.get(wuDaily2),
                     axios.get(wuDaily3),
@@ -333,6 +342,7 @@ function App() {
                     axios.get(wuDaily5),
                     axios.get(wuDaily6),
                     axios.get(wuDaily7),
+                    axios.get(wuDaily8),
                     ...statsUrls.map(({ url }) => axios.get(url))
                 ]);
 
@@ -343,13 +353,13 @@ function App() {
                 const wuData5 = transformWUData(wuResult5.data, daily5.data);
                 const wuData6 = transformWUData(wuResult6.data, daily6.data);
                 const wuData7 = transformWUData(wuResult7.data, daily7.data);
-
+                const wuData8 = transformWUData(wuResult8.data, daily8.data);
 
                 const statsData = statsResults.map((result, index) => ({ stationId: statsUrls[index].stationId, data: result.data }));
 
                 const arDataMerged = mergeData(arabiaWeatherResult.data, statsData);
 
-                const combinedData = [...arDataMerged, ...wuData, ...wuData2, ...wuData3, ...wuData4, ...wuData5, ...wuData6, ...wuData7];
+                const combinedData = [...arDataMerged, ...wuData, ...wuData2, ...wuData3, ...wuData4, ...wuData5, ...wuData6, ...wuData7, ...wuData8];
 
                 combinedData.sort((a, b) => a.temp - b.temp);
 
