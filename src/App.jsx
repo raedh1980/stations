@@ -42,7 +42,8 @@ const stationMapping = {
     "piqvi310": "شفابدران",
     "mkcef941": "الكرامة",
     "jixdw557": "البنيات",
-     "IBEITY7": "بيت لحم"
+    "IBEITY7": "بيت لحم",
+    "igyzo441": "سوف"
 };
 
 
