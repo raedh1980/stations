@@ -632,7 +632,6 @@ function App() {
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'tempMAX', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>العظمى</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'tempMIN', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الصغرى</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'windGustMax', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>اعلى هبة</th>
-                        <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'windGustMax', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>اعلى هبة</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'humidityMAX', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>رطوبة</th>
 
                     </tr>
