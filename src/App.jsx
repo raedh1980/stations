@@ -319,6 +319,11 @@ function App() {
             const now = Math.floor(new Date().getTime() / 1000);
 
 
+            const multiQueryUrl = 'https://stations.arabiaweather.com/wsquery/query/multiQuerylatlonOffset?country=JO&range=0d:now&attrib=temp.max,temp.min,windspeed.max,windgust.max,baromin.max,baromin.min,baromin.avg,rainin.sum&latlon=31.890383,35.896030';
+            const multiQueryUrlWithProxy = `https://corsproxy.io/?${encodeURIComponent(multiQueryUrl)}`;
+
+
+
             // Create URLs for the filtered stations
             const statsUrls = filteredStationList.map(stationId => {
                 const statsUrl = `https://stations.arabiaweather.com/wsquery/query/singleQuery?ID=${stationId}&range=${startOfDay}:${now}&attrib=temp.avg,temp.max,temp.min,humidity.avg,humidity.max,humidity.min,windspeed.avg,windspeed.max,windspeed.min,rainin.avg,rainin.max,rainin.min,baromin.avg,baromin.max,baromin.min&groupby=1h`;
@@ -326,7 +331,7 @@ function App() {
             });
 
             try {
-                const [arabiaWeatherResult, wuResult, wuResult2, wuResult3, wuResult4, wuResult5, wuResult6, wuResult7, wuResult8, daily1, daily2, daily3, daily4, daily5, daily6, daily7, daily8,   ...statsResults] = await Promise.all([
+                const [arabiaWeatherResult, wuResult, wuResult2, wuResult3, wuResult4, wuResult5, wuResult6, wuResult7, wuResult8, daily1, daily2, daily3, daily4, daily5, daily6, daily7, daily8, multiQueryResult,  ...statsResults] = await Promise.all([
                     axios('https://stations.arabiaweather.com/weatherstation/api/get?ws=*&attr=*'),
                     axios.get(wuUrl),
                     axios.get(wuUrl2),
@@ -344,6 +349,7 @@ function App() {
                     axios.get(wuDaily6),
                     axios.get(wuDaily7),
                     axios.get(wuDaily8),
+                    axios.get(multiQueryUrlWithProxy),
                     ...statsUrls.map(({ url }) => axios.get(url))
                 ]);
 
@@ -358,7 +364,7 @@ function App() {
 
                 const statsData = statsResults.map((result, index) => ({ stationId: statsUrls[index].stationId, data: result.data }));
 
-                const arDataMerged = mergeData(arabiaWeatherResult.data, statsData);
+                const arDataMerged = mergeData(arabiaWeatherResult.data, statsData, multiQueryResult.data);
 
                 const combinedData = [...arDataMerged, ...wuData, ...wuData2, ...wuData3, ...wuData4, ...wuData5, ...wuData6, ...wuData7, ...wuData8];
 
@@ -374,25 +380,21 @@ function App() {
 
     }, []);
 
-    function mergeData(arabiaWeatherData, statsDataArray) {
-
-
+    function mergeData(arabiaWeatherData, statsDataArray, multiQueryData) {
         let dataMap = {};
 
         // Process arabiaWeatherData
         arabiaWeatherData.forEach(item => {
             const stationId = Object.keys(item)[0];
             const details = item[stationId];
-         
+
             // Initialize or update the dataMap with station data
             dataMap[stationId] = {
                 ...dataMap[stationId],
                 ...details,
-
                 stationName: stationMapping[stationId],
                 temp: details.temp ? details.temp.toFixed(1) : undefined,
-                dailyrain: details.dailyrain ? (details.dailyrain).toFixed(2) : undefined,
-
+                dailyrain: details.dailyrain ? details.dailyrain.toFixed(2) : undefined,
                 windspeed: details.windspeed ? (details.windspeed * 3.6).toFixed(1) : undefined,
                 windgust: details.windgust ? (details.windgust * 3.6).toFixed(1) : undefined,
                 windDirection: degreesToCardinalDetailed(details.winddir),
@@ -457,40 +459,61 @@ function App() {
                         dataMap[stationId].raininSUM = (dataMap[stationId].raininSUM || 0) + observation.raininAVG;
                     }
 
-                    if (observation.windspeedMAX !== undefined) {
-                        dataMap[stationId].windgustMaxColor = getWindSpeedColor(observation.windspeedMAX * 3.6);
+                    dataMap[stationId].last_updated = new Date(observation.time).getTime();
+                });
+            });
+        });
+
+        // Process multiQueryData
+        if (multiQueryData) {
+            Object.keys(multiQueryData).forEach(stationId => {
+                const data = multiQueryData[stationId];
+
+                if (data && data.length > 0 && data[0].length > 0) {
+                    const observation = data[0][0];
+
+                    if (!dataMap[stationId]) {
+                        dataMap[stationId] = { stationName: stationMapping[stationId] };
                     }
 
-                    dataMap[stationId].last_updated = new Date(observation.time).getTime(); // Convert ISO string to timestamp if needed
-                });
+                    if (observation.windgustMAX !== undefined && observation.windgustMAX * 3.6 <160) {
+                        const windgustMaxValue = observation.windgustMAX * 3.6;
+                        dataMap[stationId].windspeedMAX = Math.max(dataMap[stationId].windgustMAX || -Infinity, windgustMaxValue);
+                        dataMap[stationId].windgustMaxColor = getWindSpeedColor(windgustMaxValue);
+                    }
 
-                // Convert toFixed after calculating min/max
-                if (dataMap[stationId].tempMAX !== undefined) {
-                    dataMap[stationId].tempMAX = dataMap[stationId].tempMAX.toFixed(1);
-                    dataMap[stationId].tempMaxColor = getTemperatureColor(dataMap[stationId].tempMAX);
-                }
-
-                if (dataMap[stationId].tempMIN !== undefined) {
-                    dataMap[stationId].tempMIN = dataMap[stationId].tempMIN.toFixed(1);
-                    dataMap[stationId].tempMinColor = getTemperatureColor(dataMap[stationId].tempMIN);
-                }
-
-                if (dataMap[stationId].windspeedMAX !== undefined) {
-                    dataMap[stationId].windspeedMAX = dataMap[stationId].windspeedMAX.toFixed(1);
-                    dataMap[stationId].windgustMaxColor = getWindSpeedColor(dataMap[stationId].windspeedMAX);
-                }
-
-                if (dataMap[stationId].windgustMAX !== undefined) {
-                    dataMap[stationId].windgustMAX = dataMap[stationId].windgustMAX.toFixed(1);
-                    dataMap[stationId].windgustMaxColor = getWindSpeedColor(dataMap[stationId].windgustMAX);
+                   
                 }
             });
+        }
+
+        // Convert toFixed after calculating min/max
+        Object.keys(dataMap).forEach(stationId => {
+            const stationData = dataMap[stationId];
+
+            if (stationData.tempMAX !== undefined) {
+                stationData.tempMAX = parseFloat(stationData.tempMAX).toFixed(1);
+                stationData.tempMaxColor = getTemperatureColor(stationData.tempMAX);
+            }
+
+            if (stationData.tempMIN !== undefined) {
+                stationData.tempMIN = parseFloat(stationData.tempMIN).toFixed(1);
+                stationData.tempMinColor = getTemperatureColor(stationData.tempMIN);
+            }
+
+            if (stationData.windspeedMAX !== undefined) {
+                stationData.windspeedMAX = parseFloat(stationData.windspeedMAX).toFixed(1);
+                stationData.windgustMaxColor = getWindSpeedColor(stationData.windspeedMAX);
+            }
+
+            if (stationData.windgustMAX !== undefined) {
+                stationData.windgustMAX = parseFloat(stationData.windgustMAX).toFixed(1);
+                stationData.windgustMaxColor = getWindSpeedColor(stationData.windgustMAX);
+            }
         });
 
         return Object.values(dataMap).filter(item => item && item.temp !== undefined && item.stationName);
     }
-
-
 
  function transformWUData(currentData, dayData) {
         if (!currentData || !currentData.observations || currentData.observations.length === 0) {
@@ -608,7 +631,8 @@ function App() {
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'dailyrain', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الامطار</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'tempMAX', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>العظمى</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'tempMIN', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الصغرى</th>
-                        <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'windspeedMAX', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>اعلى هبة</th>
+                        <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'windGustMax', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>اعلى هبة</th>
+                        <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'windGustMax', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>اعلى هبة</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'humidityMAX', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>رطوبة</th>
 
                     </tr>
