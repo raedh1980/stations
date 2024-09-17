@@ -319,7 +319,7 @@ function App() {
             const now = Math.floor(new Date().getTime() / 1000);
 
 
-            const multiQueryUrl = 'https://stations.arabiaweather.com/wsquery/query/multiQuerylatlonOffset?country=JO&range=0d:now&attrib=temp.max,temp.min,windspeed.max,windgust.max,baromin.max,baromin.min,baromin.avg,rainin.sum&latlon=31.890383,35.896030';
+            const multiQueryUrl = `https://stations.arabiaweather.com/wsquery/query/multiQuerylatlonOffset?country=JO&range=0d:now&attrib=temp.max,temp.min,windspeed.max,windgust.max&latlon=31.890383,35.896030&nocache=${Date.now()}`;
             const multiQueryUrlWithProxy = `https://corsproxy.io/?${encodeURIComponent(multiQueryUrl)}`;
 
 
