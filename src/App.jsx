@@ -296,7 +296,7 @@ function App() {
 
 
 
-            const apiKey7 = '4ed3c26d759c4ed293c26d759c5ed2aa'; // Weather Underground API Key
+            const apiKey7 = 'b8a35b8924344f94a35b892434cf9441'; // Weather Underground API Key
             const stationId7 = 'I90583409'; // Weather Underground Station ID
             const wuUrl7 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId7}&format=json&units=m&apiKey=${apiKey7}&numericPrecision=decimal`;
             const wuDaily7 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId7}&format=json&units=m&apiKey=${apiKey7}&numericPrecision=decimal`;
