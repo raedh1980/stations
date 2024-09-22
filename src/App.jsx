@@ -320,16 +320,14 @@ function App() {
 
 
             const multiQueryUrl = `https://stations.arabiaweather.com/wsquery/query/multiQuerylatlonOffset?country=JO&range=0d:now&attrib=temp.max,temp.min,windspeed.max,windgust.max&latlon=31.890383,35.896030&nocache=${Date.now()}`;
-            //const multiQueryUrlWithProxy = `https://corsproxy.io/?${encodeURIComponent(multiQueryUrl)}`;
-            const multiQueryUrlWithProxy = `https://thingproxy.freeboard.io/fetch/${multiQueryUrl}`;
-
-
+           const multiQueryUrlWithProxy = `https://corsproxy.io/?${encodeURIComponent(multiQueryUrl)}`;
+           
 
             // Create URLs for the filtered stations
             const statsUrls = filteredStationList.map(stationId => {
                 const statsUrl = `https://stations.arabiaweather.com/wsquery/query/singleQuery?ID=${stationId}&range=${startOfDay}:${now}&attrib=temp.avg,temp.max,temp.min,humidity.avg,humidity.max,humidity.min,windspeed.avg,windspeed.max,windspeed.min,rainin.avg,rainin.max,rainin.min,baromin.avg,baromin.max,baromin.min&groupby=1h`;
-                //return { stationId, url: `https://corsproxy.io/?${encodeURIComponent(statsUrl)}` };
-                return { stationId, url: `https://thingproxy.freeboard.io/fetch/${statsUrl}` };
+                return { stationId, url: `https://corsproxy.io/?${encodeURIComponent(statsUrl)}` };
+                
             });
 
             try {
