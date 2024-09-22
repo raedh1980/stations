@@ -156,7 +156,7 @@ function getRHColor(RH) {
             { min: 70, max: 80, color: '#E2F516', fontColor: '#000000' },// Reddish orange
             { min: 80, max: 89, color: '#FFFF33', fontColor: '#000000' },// Reddish orange
             { min: 90, max: 100, color: '#FEF250', fontColor: '#FFFFFF' },// Red
-        
+
 
         ];
         const defaultStyle = { backgroundColor: '#FFFFFF', fontColor: '#000000' };
@@ -167,7 +167,7 @@ function getRHColor(RH) {
 
 }
 function getTemperatureColor(value) {
-   
+
     if (value >= -10 && value <= 0) {
         return { backgroundColor: '#000000', color: '#FFFFFF' }; // Pale blue
     } else if (value > 0 && value <= 5) {
@@ -214,12 +214,12 @@ function getTemperatureColor(value) {
     else if (value > 36 && value <= 38) {
         return { backgroundColor: '#b30000', color: '#FFFFFF' }; // Plum
 
-    } else if (value > 38 && value <  40 ) {
+    } else if (value > 38 && value < 40) {
         return { backgroundColor: '#800000', color: '#FFFFFF' }; // Dark plum
 
     } else if (value >= 40 && value < 42) {
         return { backgroundColor: '#5E0000', color: '#FFFFFF' }; // Near black
-           
+
     } else if (value >= 42 && value <= 44) {
         return { backgroundColor: '#660000', color: '#FFFFFF' }; // Near black
 
@@ -229,7 +229,7 @@ function getTemperatureColor(value) {
     } else if (value > 46) {
         return { backgroundColor: '#330000', color: '#FFFFFF' }; // Near black
 
-     } else {
+    } else {
         return { backgroundColor: '#FFFFFF', color: '#000000' }; // Default for out of range
     }
 }
@@ -279,7 +279,7 @@ function App() {
             const wuUrl3 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId3}&format=json&units=m&apiKey=${apiKey3}&numericPrecision=decimal`;
             const wuDaily3 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId3}&format=json&units=m&apiKey=${apiKey3}&numericPrecision=decimal`;
 
-            const apiKey4 = '9bf5ca1d102a4146b5ca1d102aa1466b'; // Weather Underground API Key
+            const apiKey4 = '42189caf41184363989caf4118936362'; // Weather Underground API Key
             const stationId4 = 'IALJAM3'; // Weather Underground Station ID
             const wuUrl4 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId4}&format=json&units=m&apiKey=${apiKey4}&numericPrecision=decimal`;
             const wuDaily4 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId4}&format=json&units=m&apiKey=${apiKey4}&numericPrecision=decimal`;
@@ -289,7 +289,7 @@ function App() {
             const wuUrl5 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId5}&format=json&units=m&apiKey=${apiKey5}&numericPrecision=decimal`;
             const wuDaily5 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId5}&format=json&units=m&apiKey=${apiKey5}&numericPrecision=decimal`;
 
-            const apiKey6 = '3db0ab40eef446bbb0ab40eef416bbb5'; // Weather Underground API Key
+            const apiKey6 = '74cff8a01f6b4d908ff8a01f6bbd9077'; // Weather Underground API Key
             const stationId6 = 'IALJAM4'; // Weather Underground Station ID
             const wuUrl6 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId6}&format=json&units=m&apiKey=${apiKey6}&numericPrecision=decimal`;
             const wuDaily6 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId6}&format=json&units=m&apiKey=${apiKey6}&numericPrecision=decimal`;
@@ -320,20 +320,19 @@ function App() {
 
 
             const multiQueryUrl = `https://stations.arabiaweather.com/wsquery/query/multiQuerylatlonOffset?country=JO&range=0d:now&attrib=temp.max,temp.min,windspeed.max,windgust.max&latlon=31.890383,35.896030&nocache=${Date.now()}`;
-             //const multiQueryUrlWithProxy = `https://corsproxy.io/?${encodeURIComponent(multiQueryUrl)}`;
             const multiQueryUrlWithProxy = `https://corsproxyjo.azurewebsites.net/api/CorsProxyFunction?url=${encodeURIComponent(multiQueryUrl)}`;
 
- 
 
             // Create URLs for the filtered stations
             const statsUrls = filteredStationList.map(stationId => {
                 const statsUrl = `https://stations.arabiaweather.com/wsquery/query/singleQuery?ID=${stationId}&range=${startOfDay}:${now}&attrib=temp.avg,temp.max,temp.min,humidity.avg,humidity.max,humidity.min,windspeed.avg,windspeed.max,windspeed.min,rainin.avg,rainin.max,rainin.min,baromin.avg,baromin.max,baromin.min&groupby=1h`;
-                //return { stationId, url: `https://corsproxy.io/?${encodeURIComponent(statsUrl)}` };
                 return { stationId, url: `https://corsproxyjo.azurewebsites.net/api/CorsProxyFunction?url=${encodeURIComponent(statsUrl)}` };
             });
 
+
+
             try {
-                const [arabiaWeatherResult, wuResult, wuResult2, wuResult3, wuResult4, wuResult5, wuResult6, wuResult7, wuResult8, daily1, daily2, daily3, daily4, daily5, daily6, daily7, daily8, multiQueryResult,  ...statsResults] = await Promise.all([
+                const [arabiaWeatherResult, wuResult, wuResult2, wuResult3, wuResult4, wuResult5, wuResult6, wuResult7, wuResult8, daily1, daily2, daily3, daily4, daily5, daily6, daily7, daily8, multiQueryResult, ...statsResults] = await Promise.all([
                     axios('https://stations.arabiaweather.com/weatherstation/api/get?ws=*&attr=*'),
                     axios.get(wuUrl),
                     axios.get(wuUrl2),
@@ -478,13 +477,13 @@ function App() {
                         dataMap[stationId] = { stationName: stationMapping[stationId] };
                     }
 
-                    if (observation.windgustMAX !== undefined && observation.windgustMAX * 3.6 <160) {
+                    if (observation.windgustMAX !== undefined && observation.windgustMAX * 3.6 < 160) {
                         const windgustMaxValue = observation.windgustMAX * 3.6;
                         dataMap[stationId].windspeedMAX = Math.max(dataMap[stationId].windgustMAX || -Infinity, windgustMaxValue);
                         dataMap[stationId].windgustMaxColor = getWindSpeedColor(windgustMaxValue);
                     }
 
-                   
+
                 }
             });
         }
@@ -517,7 +516,7 @@ function App() {
         return Object.values(dataMap).filter(item => item && item.temp !== undefined && item.stationName);
     }
 
- function transformWUData(currentData, dayData) {
+    function transformWUData(currentData, dayData) {
         if (!currentData || !currentData.observations || currentData.observations.length === 0) {
             console.log("No current data available or station is offline");
             return []; // Return an empty array if no current data is available
@@ -534,25 +533,25 @@ function App() {
         const filterSpikes = (obs) => {
             return obs.filter(data =>
                 data.metric.tempHigh < 60 && data.metric.tempHigh > -50 &&
-                data.metric.tempLow < 60 && data.metric.tempLow > -50 
+                data.metric.tempLow < 60 && data.metric.tempLow > -50
             );
         };
 
         // Filter out spikes and invalid values from day observations
-        const filteredObservations =  filterSpikes(dayObservations);
+        const filteredObservations = filterSpikes(dayObservations);
 
         // Ensure filteredObservations is not empty
         if (filteredObservations.length === 0) {
             console.log("All observations filtered out due to spikes or invalid values.");
             return [];
         }
- 
+
         // Filter out invalid humidityHigh values explicitly
         const validHumidityHighValues = filteredObservations
             .map(obs => obs.humidityHigh)
             .filter(value => value !== null && value !== undefined && !isNaN(value));
 
-         
+
         // Compute max temperature, humidity, and wind gust from the filtered day data
         const tempMax = Math.max(...filteredObservations.map(obs => obs.metric.tempHigh));
         const windGustMax = Math.max(...filteredObservations.map(obs => obs.metric.windgustHigh));
@@ -566,7 +565,7 @@ function App() {
                 .filter(tempLow => tempLow !== null && tempLow !== undefined)
         );
 
-     // Return null if tempMin is Infinity
+        // Return null if tempMin is Infinity
         tempMin = tempMin === Infinity ? 0 : tempMin;
         humidityMax = humidityMax === -Infinity ? 0 : humidityMax;
 
@@ -592,7 +591,7 @@ function App() {
             windspeedColor: getWindSpeedColor(currentObservation.metric.windSpeed),
             windgustColor: getWindSpeedColor(currentObservation.metric.windGust),
             dailyrain: currentObservation.metric.precipTotal !== null ? currentObservation.metric.precipTotal.toFixed(1) : '0.0',
-             rainin: (last5minrain * 4.7).toFixed(1), // currentObservation.metric.precipRate.toFixed(1),
+            rainin: (last5minrain * 4.7).toFixed(1), // currentObservation.metric.precipRate.toFixed(1),
             rainRateColor: getRainRateColor(currentObservation.metric.precipRate),
             totalRainColor: getRainTotalColor(currentObservation.metric.precipTotal),
             tempMAX: tempMax, // Converting to Celsius
@@ -607,7 +606,7 @@ function App() {
             last_updated: currentObservation.obsTimeUtc
         }];
     }
-   
+
 
 
 
@@ -695,7 +694,7 @@ function App() {
 
                             <td style={{ backgroundColor: item.windgustMaxColor }}>{item.windspeedMAX || '-'}</td>
 
-                            
+
                             <td style={{ backgroundColor: item.humidityMAXColor }}>{item.humidityMAX || '-'} </td>
 
                         </tr>
