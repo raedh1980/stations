@@ -420,11 +420,11 @@ function App() {
                 }
 
                 record.forEach(observation => {
-                    if (observation.tempMAX !== undefined && observation.tempMAX <= 60 && observation.tempMAX >= -50) {
+                    if (observation.tempMAX !== null && observation.tempMAX !== undefined && observation.tempMAX <= 60 && observation.tempMAX >= -50) {
                         dataMap[stationId].tempMAX = Math.max(dataMap[stationId].tempMAX || -Infinity, observation.tempMAX);
                     }
 
-                    if (observation.tempMIN !== undefined && observation.tempMIN >= -50 && observation.tempMIN <= 60) {
+                    if (observation.tempMIN !== null && observation.tempMIN !== undefined && observation.tempMIN >= -50 && observation.tempMIN <= 60) {
                         dataMap[stationId].tempMIN = Math.min(dataMap[stationId].tempMIN || Infinity, observation.tempMIN);
                     }
 
@@ -432,11 +432,11 @@ function App() {
                         dataMap[stationId].humidityMAX = Math.max(dataMap[stationId].humidityMAX || -Infinity, observation.humidityMAX);
                     }
 
-                    if (observation.humidityMIN !== undefined) {
-                        dataMap[stationId].humidityMIN = Math.min(dataMap[stationId].humidityMIN || Infinity, observation.humidityMIN);
+                    if (observation.humidityMIN !== null && observation.humidityMIN !== undefined) {
+                       dataMap[stationId].humidityMIN = Math.min(dataMap[stationId].humidityMIN || Infinity, observation.humidityMIN);
                     }
 
-                    if (observation.windspeedMAX !== undefined) {
+                    if (observation.windspeedMAX !== null && observation.windspeedMAX !== undefined) {
                         dataMap[stationId].windspeedMAX = Math.max(dataMap[stationId].windspeedMAX || -Infinity, observation.windspeedMAX * 3.6);
                     }
 
@@ -456,7 +456,7 @@ function App() {
                         dataMap[stationId].barominAVG = observation.barominAVG;
                     }
 
-                    if (observation.raininAVG !== undefined) {
+                    if (observation.raininAVG !== null && observation.raininAVG !== undefined) {
                         dataMap[stationId].raininSUM = (dataMap[stationId].raininSUM || 0) + observation.raininAVG;
                     }
 
@@ -476,6 +476,10 @@ function App() {
                     if (!dataMap[stationId]) {
                         dataMap[stationId] = { stationName: stationMapping[stationId] };
                     }
+
+             
+              
+              
 
                     if (observation.windgustMAX !== undefined && observation.windgustMAX * 3.6 < 160) {
                         const windgustMaxValue = observation.windgustMAX * 3.6;
