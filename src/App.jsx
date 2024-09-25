@@ -414,11 +414,11 @@ function App() {
                 }
 
                 record.forEach(observation => {
-                    if (observation.tempMAX !== null && observation.tempMAX !== undefined && observation.tempMAX <= 60 && observation.tempMAX >= -50) {
+                    if (observation.tempMAX !== null && observation.tempMAX !== undefined && observation.tempMAX < 56 && observation.tempMAX > -30) {
                         dataMap[stationId].tempMAX = Math.max(dataMap[stationId].tempMAX || -Infinity, observation.tempMAX);
                     }
 
-                    if (observation.tempMIN !== null && observation.tempMIN !== undefined && observation.tempMIN >= -50 && observation.tempMIN <= 60) {
+                    if (observation.tempMIN !== null && observation.tempMIN !== undefined && observation.tempMIN > -30 && observation.tempMIN < 60) {
                         dataMap[stationId].tempMIN = Math.min(dataMap[stationId].tempMIN || Infinity, observation.tempMIN);
                     }
 
