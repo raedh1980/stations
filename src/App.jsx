@@ -261,49 +261,27 @@ function App() {
 
     useEffect(() => {
         const fetchData = async () => {
+            setLastUpdateTime(new Date().toLocaleString()); // Updates with the current time
 
-            setLastUpdateTime(new Date().toLocaleString());  // Updates with the current time
+            // Define Weather Underground API keys and station IDs
+            const wuStations = [
+                { apiKey: 'c0146b8d4b904893946b8d4b90589325', stationId: 'IAMMAN46' },
+                { apiKey: 'fb407fb8c0454376807fb8c045237692', stationId: 'IJERAS1' },
+                { apiKey: '36d76d5a338a4641976d5a338a3641bb', stationId: 'IAMMAN21' },
+                { apiKey: '42189caf41184363989caf4118936362', stationId: 'IALJAM3' },
+                { apiKey: '74cff8a01f6b4d908ff8a01f6bbd9077', stationId: 'IALJAM4' },
+                { apiKey: 'b8a35b8924344f94a35b892434cf9441', stationId: 'I90583409' },
+                { apiKey: '9758586d0425493998586d0425593903', stationId: 'IBEITY7' },
+            ];
 
-            const apiKey = 'c0146b8d4b904893946b8d4b90589325'; // Weather Underground API Merg
-            const stationId = 'IAMMAN46'; // Weather Underground Station ID
-            const wuUrl = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId}&format=json&units=m&apiKey=${apiKey}&numericPrecision=decimal`;
-            const wuDaily = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId}&format=json&units=m&apiKey=${apiKey}&numericPrecision=decimal`;
+            // Generate WU URLs for both current and daily data for all stations
+            const generateWUUrls = (station) => ({
+                current: `https://api.weather.com/v2/pws/observations/current?stationId=${station.stationId}&format=json&units=m&apiKey=${station.apiKey}&numericPrecision=decimal`,
+                daily: `https://api.weather.com/v2/pws/observations/all/1day?stationId=${station.stationId}&format=json&units=m&apiKey=${station.apiKey}&numericPrecision=decimal`
+            });
 
-            const apiKey2 = 'fb407fb8c0454376807fb8c045237692'; // Weather Underground API Key
-            const stationId2 = 'IJERAS1'; // Weather Underground Station ID
-            const wuUrl2 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId2}&format=json&units=m&apiKey=${apiKey2}&numericPrecision=decimal`;
-            const wuDaily2 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId2}&format=json&units=m&apiKey=${apiKey2}&numericPrecision=decimal`;
-
-            const apiKey3 = '36d76d5a338a4641976d5a338a3641bb'; // Weather Underground API Key
-            const stationId3 = 'IAMMAN21'; // Weather Underground Station ID
-            const wuUrl3 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId3}&format=json&units=m&apiKey=${apiKey3}&numericPrecision=decimal`;
-            const wuDaily3 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId3}&format=json&units=m&apiKey=${apiKey3}&numericPrecision=decimal`;
-
-            const apiKey4 = '42189caf41184363989caf4118936362'; // Weather Underground API Key
-            const stationId4 = 'IALJAM3'; // Weather Underground Station ID
-            const wuUrl4 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId4}&format=json&units=m&apiKey=${apiKey4}&numericPrecision=decimal`;
-            const wuDaily4 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId4}&format=json&units=m&apiKey=${apiKey4}&numericPrecision=decimal`;
-
-            const apiKey6 = '74cff8a01f6b4d908ff8a01f6bbd9077'; // Weather Underground API Key
-            const stationId6 = 'IALJAM4'; // Weather Underground Station ID
-            const wuUrl6 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId6}&format=json&units=m&apiKey=${apiKey6}&numericPrecision=decimal`;
-            const wuDaily6 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId6}&format=json&units=m&apiKey=${apiKey6}&numericPrecision=decimal`;
-
-
-
-            const apiKey7 = 'b8a35b8924344f94a35b892434cf9441'; // Weather Underground API Key
-            const stationId7 = 'I90583409'; // Weather Underground Station ID
-            const wuUrl7 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId7}&format=json&units=m&apiKey=${apiKey7}&numericPrecision=decimal`;
-            const wuDaily7 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId7}&format=json&units=m&apiKey=${apiKey7}&numericPrecision=decimal`;
-
-
-
-            const apiKey8 = '9758586d0425493998586d0425593903'; // Weather Underground API Key
-            const stationId8 = 'IBEITY7'; // Weather Underground Station ID
-            const wuUrl8 = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId8}&format=json&units=m&apiKey=${apiKey8}&numericPrecision=decimal`;
-            const wuDaily8 = `https://api.weather.com/v2/pws/observations/all/1day?stationId=${stationId8}&format=json&units=m&apiKey=${apiKey8}&numericPrecision=decimal`;
-
-
+            // List of URLs to be fetched
+            const wuUrls = wuStations.map(generateWUUrls);
 
             // Filter out stations starting with IA and IJ
             const filteredStationList = Object.keys(stationMapping).filter(id => !id.startsWith('IA') && !id.startsWith('IJ'));
@@ -313,67 +291,66 @@ function App() {
             const startOfDay = Math.floor(new Date(today.setHours(0, 0, 0, 0)).getTime() / 1000);
             const now = Math.floor(new Date().getTime() / 1000);
 
-
             const multiQueryUrl = `https://stations.arabiaweather.com/wsquery/query/multiQuerylatlonOffset?country=JO&range=0d:now&attrib=temp.max,temp.min,windspeed.max,windgust.max&latlon=31.890383,35.896030&nocache=${Date.now()}`;
             const multiQueryUrlWithProxy = `https://corsproxyjo.azurewebsites.net/api/CorsProxyFunction?url=${encodeURIComponent(multiQueryUrl)}`;
 
-
-            // Create URLs for the filtered stations
+            // Create URLs for filtered AW stations
             const statsUrls = filteredStationList.map(stationId => {
                 const statsUrl = `https://stations.arabiaweather.com/wsquery/query/singleQuery?ID=${stationId}&range=${startOfDay}:${now}&attrib=temp.avg,temp.max,temp.min,humidity.avg,humidity.max,humidity.min,windspeed.avg,windspeed.max,windspeed.min,rainin.avg,rainin.max,rainin.min,baromin.avg,baromin.max,baromin.min&groupby=1h`;
                 return { stationId, url: `https://corsproxyjo.azurewebsites.net/api/CorsProxyFunction?url=${encodeURIComponent(statsUrl)}` };
             });
 
-
-
             try {
-                const [arabiaWeatherResult, wuResult, wuResult2, wuResult3, wuResult4,  wuResult6, wuResult7, wuResult8, daily1, daily2, daily3, daily4,  daily6, daily7, daily8, multiQueryResult, ...statsResults] = await Promise.all([
-                    axios('https://stations.arabiaweather.com/weatherstation/api/get?ws=*&attr=*'),
-                    axios.get(wuUrl),
-                    axios.get(wuUrl2),
-                    axios.get(wuUrl3),
-                    axios.get(wuUrl4),
-              
-                    axios.get(wuUrl6),
-                    axios.get(wuUrl7),
-                    axios.get(wuUrl8),
-                    axios.get(wuDaily),
-                    axios.get(wuDaily2),
-                    axios.get(wuDaily3),
-                    axios.get(wuDaily4),
-               
-                    axios.get(wuDaily6),
-                    axios.get(wuDaily7),
-                    axios.get(wuDaily8),
-                    axios.get(multiQueryUrlWithProxy),
-                    ...statsUrls.map(({ url }) => axios.get(url))
+                // Perform all API calls in parallel using Promise.all
+                const responses = await Promise.all([
+                    axios('https://stations.arabiaweather.com/weatherstation/api/get?ws=*&attr=*'), // Fetch all AW stations data
+                    ...wuUrls.flatMap(url => [axios.get(url.current), axios.get(url.daily)]), // Fetch WU current and daily data for all stations
+                    axios.get(multiQueryUrlWithProxy), // Fetch multi-query data from AW
+                    ...statsUrls.map(({ url }) => axios.get(url)) // Fetch stats for AW filtered stations (rest element placed last)
                 ]);
 
-                const wuData = transformWUData(wuResult.data, daily1.data);
-                const wuData2 = transformWUData(wuResult2.data, daily2.data);
-                const wuData3 = transformWUData(wuResult3.data, daily3.data);
-                const wuData4 = transformWUData(wuResult4.data, daily4.data);
-                const wuData6 = transformWUData(wuResult6.data, daily6.data);
-                const wuData7 = transformWUData(wuResult7.data, daily7.data);
-                const wuData8 = transformWUData(wuResult8.data, daily8.data);
+                // Destructure the responses array
+                const [
+                    arabiaWeatherResult,
+                    wuResult, wuDaily1, wuResult2, wuDaily2, wuResult3, wuDaily3, wuResult4, wuDaily4,
+                    wuResult6, wuDaily6, wuResult7, wuDaily7, wuResult8, wuDaily8,
+                    multiQueryResult,
+                    ...statsResults
+                ] = responses;
 
-                const statsData = statsResults.map((result, index) => ({ stationId: statsUrls[index].stationId, data: result.data }));
+                // Transform WU results into usable data
+                const wuData = [
+                    transformWUData(wuResult.data, wuDaily1.data),
+                    transformWUData(wuResult2.data, wuDaily2.data),
+                    transformWUData(wuResult3.data, wuDaily3.data),
+                    transformWUData(wuResult4.data, wuDaily4.data),
+                    transformWUData(wuResult6.data, wuDaily6.data),
+                    transformWUData(wuResult7.data, wuDaily7.data),
+                    transformWUData(wuResult8.data, wuDaily8.data),
+                ].flat();
 
+                // Process ArabiaWeather data
+                const statsData = statsResults.map((result, index) => ({
+                    stationId: statsUrls[index].stationId,
+                    data: result.data
+                }));
+
+                // Merge all data from AW and WU into a single dataset
                 const arDataMerged = mergeData(arabiaWeatherResult.data, statsData, multiQueryResult.data);
+                const combinedData = [...arDataMerged, ...wuData];
 
-                const combinedData = [...arDataMerged, ...wuData, ...wuData2, ...wuData3, ...wuData4, ...wuData6, ...wuData7, ...wuData8];
-
+                // Sort by temperature and update the state
                 combinedData.sort((a, b) => a.temp - b.temp);
-
                 setWeatherData(combinedData);
+
             } catch (error) {
                 console.error('Error fetching weather data:', error);
             }
         };
 
         fetchData();
-
     }, []);
+
 
     function mergeData(arabiaWeatherData, statsDataArray, multiQueryData) {
         let dataMap = {};
@@ -427,7 +404,7 @@ function App() {
                     }
 
                     if (observation.humidityMIN !== null && observation.humidityMIN !== undefined) {
-                       dataMap[stationId].humidityMIN = Math.min(dataMap[stationId].humidityMIN || Infinity, observation.humidityMIN);
+                        dataMap[stationId].humidityMIN = Math.min(dataMap[stationId].humidityMIN || Infinity, observation.humidityMIN);
                     }
 
                     if (observation.windspeedMAX !== null && observation.windspeedMAX !== undefined) {
@@ -471,9 +448,9 @@ function App() {
                         dataMap[stationId] = { stationName: stationMapping[stationId] };
                     }
 
-             
-              
-              
+
+
+
 
                     if (observation.windgustMAX !== undefined && observation.windgustMAX * 3.6 < 160) {
                         const windgustMaxValue = observation.windgustMAX * 3.6;
