@@ -573,7 +573,7 @@ function App() {
                 // if (timeDiffMinutes > 0 && timeDiffMinutes <= 15) {
 
     
-                    if (timeDiffMinutes > 0 && timeDiffMinutes <= 5) timeDiffMinutes = 5;
+                    if (timeDiffMinutes > 0 && timeDiffMinutes <= 10) timeDiffMinutes = 10;
 
                     last5minrain = latestObservation.observations[0].metric.precipTotal - observationOne5MinAgo.metric.precipTotal;
 
