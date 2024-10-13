@@ -544,8 +544,7 @@ function App() {
         tempMin = tempMin === Infinity ? 0 : tempMin;
         humidityMax = humidityMax === -Infinity ? 0 : humidityMax;
 
-        var last5minrain = 0.0;
-        // Ensure the observations are sorted by time
+     /*   var last5minrain = 0.0;
         if (filteredObservations.length >= 2) {
             var latestObservation = currentData;
             var observationOne5MinAgo = filteredObservations[filteredObservations.length - 1];
@@ -555,7 +554,38 @@ function App() {
                 //last5minrain = last5minrain >= 0 ? (last5minrain / 0.0833).toFixed(1) : 0; // Ensure no negative values
                 last5minrain = last5minrain >= 0 ? ((last5minrain / 5) * 60).toFixed(1) : 0; // based on cumulus software calculations
             }
+        }*/
+
+
+        var last5minrain = 0.0;
+
+        // Ensure the observations are sorted by time
+        if (filteredObservations.length >= 2) {
+            var latestObservation = currentData;
+            var observationOne5MinAgo = filteredObservations[filteredObservations.length - 1];
+
+            if (latestObservation != null && observationOne5MinAgo != null) {
+                // Get the time difference between the latest observation and the previous one
+                var timeDiffMillis = new Date(latestObservation.observations[0].obsTimeUtc).getTime() - new Date(observationOne5MinAgo.obsTimeUtc).getTime();
+                var timeDiffMinutes = timeDiffMillis / 60000; // convert milliseconds to minutes
+
+                // Avoid unrealistic calculations by ignoring observations with a large time gap (e.g., >15 mins)
+                // if (timeDiffMinutes > 0 && timeDiffMinutes <= 15) {
+
+    
+                    if (timeDiffMinutes > 0 && timeDiffMinutes <= 5) timeDiffMinutes = 5;
+
+                    last5minrain = latestObservation.observations[0].metric.precipTotal - observationOne5MinAgo.metric.precipTotal;
+
+                    // Ensure no negative values and adjust calculation based on actual time difference
+                    last5minrain = last5minrain >= 0 ? ((last5minrain / timeDiffMinutes) * 60).toFixed(1) : 0;
+                /*} else {
+                    console.log("Observation gap too large, skipping rain rate calculation.");
+                    last5minrain = 0; // Set to 0 or handle as per your use case
+                }*/
+            }
         }
+
         return [{
             stationName: stationMapping[currentObservation.stationID], // Assuming mapping exists
             temp: currentObservation.metric.temp,
