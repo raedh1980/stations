@@ -548,11 +548,12 @@ function App() {
         // Ensure the observations are sorted by time
         if (filteredObservations.length >= 2) {
             var latestObservation = currentData;
-            var observationOne5MinAgo = filteredObservations[filteredObservations.length - 2];
+            var observationOne5MinAgo = filteredObservations[filteredObservations.length - 1];
 
             if (latestObservation != null && observationOne5MinAgo != null) {
                 last5minrain = latestObservation.observations[0].metric.precipTotal - observationOne5MinAgo.metric.precipTotal;
-                last5minrain = last5minrain >= 0 ? last5minrain : 0; // Ensure no negative values
+                //last5minrain = last5minrain >= 0 ? (last5minrain / 0.0833).toFixed(1) : 0; // Ensure no negative values
+                last5minrain = last5minrain >= 0 ? ((last5minrain / 5) * 60).toFixed(1) : 0; // based on cumulus software calculations
             }
         }
         return [{
@@ -566,7 +567,7 @@ function App() {
             windspeedColor: getWindSpeedColor(currentObservation.metric.windSpeed),
             windgustColor: getWindSpeedColor(currentObservation.metric.windGust),
             dailyrain: currentObservation.metric.precipTotal !== null ? currentObservation.metric.precipTotal.toFixed(1) : '0.0',
-            rainin: (last5minrain * 4.7).toFixed(1), // currentObservation.metric.precipRate.toFixed(1),
+            rainin: last5minrain, // currentObservation.metric.precipRate.toFixed(1),
             rainRateColor: getRainRateColor(currentObservation.metric.precipRate),
             totalRainColor: getRainTotalColor(currentObservation.metric.precipTotal),
             tempMAX: tempMax, // Converting to Celsius
