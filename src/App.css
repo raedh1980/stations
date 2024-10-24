@@ -1,51 +1,54 @@
-﻿@media (max-width: 1020px) {
-    body, .container {
-        width: 1020px; /* Force the width to be 1024px on all devices */
-        overflow-x: visible; /* Allow horizontal scrolling */
+﻿/* Ensure the table container allows scrolling on smaller screens */
+@media (max-width: 1020px) {
+    .container {
+        width: 100%; /* Ensure the container takes full width */
+        overflow-x: auto; /* Enable horizontal scrolling */
+        overflow-y: hidden; /* Prevent vertical scrolling */
+    }
+
+    .rtl-table {
+        font-size: 14px; /* Adjust font size for mobile */
+        white-space: nowrap; /* Prevent wrapping of table content */
+    }
+
+    th, td {
+        padding: 8px; /* Reduce padding for smaller screens */
     }
 }
 
+/* Table styling */
 th, td {
-    border: 1px solid #ddd; /* Optional: adds border for clarity */
-
+    border: 1px solid #ddd;
     padding: 10px;
 }
 
-
-
-
-
+/* RTL Table Styling */
 .rtl-table {
     font-size: 17px;
-    max-width: 1024; /* Or set a maximum width */
-    float: right;
+    max-width: 1024px;
     font-family: Calibri;
     font-weight: bold;
     direction: rtl;
-    border-collapse: collapse; /* Collapses borders between table cells */
-
-
-    border: 1px solid #ccc; /* Adds a border around the table */
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+    white-space: nowrap; /* Prevent text from wrapping */
 }
 
-
-    .rtl-table th,
-    .rtl-table td {
-        border: 3px solid #ccc; /* Light grey border for readability */
-        padding: 5px; /* Adds space around text in each cell */
+    /* Header and cell styling */
+    .rtl-table th, .rtl-table td {
+        border: 3px solid #ccc;
+        padding: 5px;
         text-align: center;
     }
 
+    /* Header background and text color */
     .rtl-table th {
-        background-color: #f9f9f9; /* Light background for headers */
-        color: #333; /* Darker text for contrast */
-    }
-
-    .rtl-table th,
-    .rtl-table td {
+        background-color: #f9f9f9;
+        color: #333;
         cursor: pointer;
     }
 
+        /* Sorting indicators */
         .rtl-table th.sorted-asc::after {
             content: " ▲";
         }

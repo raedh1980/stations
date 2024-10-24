@@ -673,7 +673,7 @@ function App() {
                                 backgroundColor: item.rainRateColor ? item.rainRateColor.backgroundColor : '#FFFFFF',
                                 color: item.rainRateColor ? item.rainRateColor.color : '#000000'
                             }}>
-                                {item.rainin || '0'} مم
+                                {item.rainin|| '0'} مم/س
                             </td>
 
 
