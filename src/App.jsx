@@ -563,7 +563,7 @@ function App() {
         }*/
 
 
-        var last5minrain = currentData.observations[0].metric.precipRate;
+        var last5minrain = currentData.observations[0].metric.precipRate.toFixed(1);
 
         // Ensure the observations are sorted by time
         if (filteredObservations.length >= 2 && currentData.observations[0].stationID != 'IAJLOU2') {
