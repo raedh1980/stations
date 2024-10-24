@@ -43,7 +43,8 @@ const stationMapping = {
     "mkcef941": "الكرامة",
     "jixdw557": "البنيات",
     "IBEITY7": "بيت لحم",
-    "igyzo441": "سوف"
+    "igyzo441": "سوف",
+    "IAJLOU2": "كفرنجة"
 };
 
 
@@ -275,7 +276,8 @@ function App() {
                 { apiKey: '74cff8a01f6b4d908ff8a01f6bbd9077', stationId: 'IALJAM4' },
                 { apiKey: 'b8a35b8924344f94a35b892434cf9441', stationId: 'I90583409' },
                 { apiKey: '9758586d0425493998586d0425593903', stationId: 'IBEITY7' },
-            ];
+                { apiKey: 'fda10643a8fd4a14a10643a8fd9a14a0', stationId: 'IAJLOU2' },
+               ];
 
             // Generate WU URLs for both current and daily data for all stations
             const generateWUUrls = (station) => ({
@@ -287,7 +289,7 @@ function App() {
             const wuUrls = wuStations.map(generateWUUrls);
 
             // Filter out stations starting with IA and IJ
-            const filteredStationList = Object.keys(stationMapping).filter(id => !id.startsWith('IA') && !id.startsWith('IJ'));
+            const filteredStationList = Object.keys(stationMapping).filter(id => !id.startsWith('IA') && !id.startsWith('IJ') );
 
             // Calculate today's start and end timestamps
             const today = new Date();
@@ -316,7 +318,7 @@ function App() {
                 const [
                     arabiaWeatherResult,
                     wuResult, wuDaily1, wuResult2, wuDaily2, wuResult3, wuDaily3, wuResult4, wuDaily4,
-                    wuResult6, wuDaily6, wuResult7, wuDaily7, wuResult8, wuDaily8,
+                    wuResult6, wuDaily6, wuResult7, wuDaily7, wuResult8, wuDaily8, wuResult9, wuDaily9,
                     multiQueryResult,
                     ...statsResults
                 ] = responses;
@@ -330,6 +332,7 @@ function App() {
                     transformWUData(wuResult6.data, wuDaily6.data),
                     transformWUData(wuResult7.data, wuDaily7.data),
                     transformWUData(wuResult8.data, wuDaily8.data),
+                    transformWUData(wuResult9.data, wuDaily9.data),
                 ].flat();
 
                 // Process ArabiaWeather data
@@ -560,10 +563,10 @@ function App() {
         }*/
 
 
-        var last5minrain = 0.0;
+        var last5minrain = currentData.observations[0].metric.precipRate;
 
         // Ensure the observations are sorted by time
-        if (filteredObservations.length >= 2) {
+        if (filteredObservations.length >= 2 && currentData.observations[0].stationID != 'IAJLOU2') {
             var latestObservation = currentData;
             var observationOne5MinAgo = filteredObservations[filteredObservations.length - 1];
 
