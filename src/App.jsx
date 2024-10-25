@@ -32,7 +32,7 @@ const stationMapping = {
     "cxaqx785": "الشوبك",
     "dnhiq564": "الرونق",
     "lufbk802": "الزرقاء",
-    "vwjcb125": "جبل المريخ",
+    "IAMMAN74": "جبل المريخ",
     "IAMMAN46": "جبل الزهور ",
     "IJERAS1": "جرش",
     "IAMMAN21": "طبربور",
@@ -277,6 +277,9 @@ function App() {
                 { apiKey: 'b8a35b8924344f94a35b892434cf9441', stationId: 'I90583409' },
                 { apiKey: '9758586d0425493998586d0425593903', stationId: 'IBEITY7' },
                 { apiKey: 'fda10643a8fd4a14a10643a8fd9a14a0', stationId: 'IAJLOU2' },
+                { apiKey: '9adaf76dffda46669af76dffda466640', stationId: 'IAMMAN74' },
+
+                
                ];
 
             // Generate WU URLs for both current and daily data for all stations
@@ -306,50 +309,99 @@ function App() {
             });
 
             try {
-                // Perform all API calls in parallel using Promise.all
-                const responses = await Promise.all([
-                    axios('https://stations.arabiaweather.com/weatherstation/api/get?ws=*&attr=*'), // Fetch all AW stations data
-                    ...wuUrls.flatMap(url => [axios.get(url.current), axios.get(url.daily)]), // Fetch WU current and daily data for all stations
-                    axios.get(multiQueryUrlWithProxy), // Fetch multi-query data from AW
-                    ...statsUrls.map(({ url }) => axios.get(url)) // Fetch stats for AW filtered stations (rest element placed last)
+                // Create an axios instance with a timeout
+                const axiosInstance = axios.create({
+                    timeout: 2000, // Timeout after 10 seconds (adjust as needed)
+                });
+
+                // Perform all API calls in parallel using Promise.allSettled
+                const responses = await Promise.allSettled([
+                    axiosInstance.get('https://stations.arabiaweather.com/weatherstation/api/get?ws=*&attr=*'), // Fetch all AW stations data
+                    ...wuUrls.flatMap(url => [
+                        axiosInstance.get(url.current),
+                        axiosInstance.get(url.daily)
+                    ]), // Fetch WU current and daily data for all stations
+                    axiosInstance.get(multiQueryUrlWithProxy), // Fetch multi-query data from AW
+                    ...statsUrls.map(({ url }) => axiosInstance.get(url)) // Fetch stats for AW filtered stations (rest element placed last)
                 ]);
 
                 // Destructure the responses array
                 const [
                     arabiaWeatherResult,
                     wuResult, wuDaily1, wuResult2, wuDaily2, wuResult3, wuDaily3, wuResult4, wuDaily4,
-                    wuResult6, wuDaily6, wuResult7, wuDaily7, wuResult8, wuDaily8, wuResult9, wuDaily9,
+                    wuResult6, wuDaily6, wuResult7, wuDaily7, wuResult8, wuDaily8, wuResult9, wuDaily9, wuResult10, wuDaily10,
                     multiQueryResult,
                     ...statsResults
                 ] = responses;
 
-                // Transform WU results into usable data
+                // Helper function to extract data or handle errors
+                const getData = (result) => {
+                    if (result.status === 'fulfilled') {
+                        return result.value.data; // Access the response data
+                    } else {
+                        if (axios.isCancel(result.reason)) {
+                            console.error('API call canceled:', result.reason.message);
+                        } else if (result.reason.code === 'ECONNABORTED') {
+                            console.error('API call timed out:', result.reason.config.url);
+                        } else {
+                            console.error('API call failed:', result.reason);
+                        }
+                        return null; // Or handle the error as needed
+                    }
+                };
+
+                // Transform WU results into usable data, handling possible nulls
                 const wuData = [
-                    transformWUData(wuResult.data, wuDaily1.data),
-                    transformWUData(wuResult2.data, wuDaily2.data),
-                    transformWUData(wuResult3.data, wuDaily3.data),
-                    transformWUData(wuResult4.data, wuDaily4.data),
-                    transformWUData(wuResult6.data, wuDaily6.data),
-                    transformWUData(wuResult7.data, wuDaily7.data),
-                    transformWUData(wuResult8.data, wuDaily8.data),
-                    transformWUData(wuResult9.data, wuDaily9.data),
-                ].flat();
+                    transformWUData(getData(wuResult), getData(wuDaily1)),
+                    transformWUData(getData(wuResult2), getData(wuDaily2)),
+                    transformWUData(getData(wuResult3), getData(wuDaily3)),
+                    transformWUData(getData(wuResult4), getData(wuDaily4)),
+                    transformWUData(getData(wuResult6), getData(wuDaily6)),
+                    transformWUData(getData(wuResult7), getData(wuDaily7)),
+                    transformWUData(getData(wuResult8), getData(wuDaily8)),
+                    transformWUData(getData(wuResult9), getData(wuDaily9)),
+                    transformWUData(getData(wuResult10), getData(wuDaily10)),
+                ].flat().filter(item => item != null); // Filter out nulls if necessary
 
                 // Process ArabiaWeather data
-                const statsData = statsResults.map((result, index) => ({
-                    stationId: statsUrls[index].stationId,
-                    data: result.data
-                }));
+                const statsData = statsResults.map((result, index) => {
+                    const data = getData(result);
+                    if (data) {
+                        return {
+                            stationId: statsUrls[index].stationId,
+                            data
+                        };
+                    } else {
+                        // Handle error or skip this entry
+                        return null;
+                    }
+                }).filter(item => item != null); // Remove null entries
 
-                // Merge all data from AW and WU into a single dataset
-                const arDataMerged = mergeData(arabiaWeatherResult.data, statsData, multiQueryResult.data);
-                const combinedData = [...arDataMerged, ...wuData];
+                // Get ArabiaWeather main data
+                const arabiaWeatherData = getData(arabiaWeatherResult);
+                const multiQueryData = getData(multiQueryResult);
 
-                // Sort by temperature and update the state
-                combinedData.sort((a, b) => a.temp - b.temp);
-                setWeatherData(combinedData);
+                // Check if critical data is available
+                if (arabiaWeatherData && multiQueryData) {
+                    // Merge all data from AW and WU into a single dataset
+                    const arDataMerged = mergeData(arabiaWeatherData, statsData, multiQueryData);
+                    const combinedData = [...arDataMerged, ...wuData];
 
-            } catch (error) {
+                    // Sort by temperature and update the state
+                    combinedData.sort((a, b) => a.temp - b.temp);
+                    setWeatherData(combinedData);
+                } else {
+                    // Handle the case where critical data is missing
+                    console.error('Critical data from ArabiaWeather API is missing. Cannot proceed with merging data.');
+                    // Optionally, proceed with available data or notify the user
+                    const combinedData = [...wuData];
+                    combinedData.sort((a, b) => a.temp - b.temp);
+                    setWeatherData(combinedData);
+                }
+
+            }
+
+             catch (error) {
                 console.error('Error fetching weather data:', error);
             }
         };
