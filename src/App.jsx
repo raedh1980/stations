@@ -311,7 +311,7 @@ function App() {
             try {
                 // Create an axios instance with a timeout
                 const axiosInstance = axios.create({
-                    timeout: 2000, // Timeout after 10 seconds (adjust as needed)
+                    timeout: 3000, // Timeout after 10 seconds (adjust as needed)
                 });
 
                 // Perform all API calls in parallel using Promise.allSettled
@@ -382,7 +382,7 @@ function App() {
                 const multiQueryData = getData(multiQueryResult);
 
                 // Check if critical data is available
-                if (arabiaWeatherData && multiQueryData) {
+                if (arabiaWeatherData ) {
                     // Merge all data from AW and WU into a single dataset
                     const arDataMerged = mergeData(arabiaWeatherData, statsData, multiQueryData);
                     const combinedData = [...arDataMerged, ...wuData];
