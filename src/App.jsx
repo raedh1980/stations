@@ -311,7 +311,7 @@ function App() {
             try {
                 // Create an axios instance with a timeout
                 const axiosInstance = axios.create(
-                   // { timeout: 3000, }
+                    { timeout: 4000, }
                 );
 
                 // Perform all API calls in parallel using Promise.allSettled
