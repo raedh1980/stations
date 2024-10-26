@@ -325,7 +325,6 @@ function App() {
                     ...statsUrls.map(({ url }) => axiosInstance.get(url)) // Fetch stats for AW filtered stations (rest element placed last)
                 ]);
 
-                // Destructure the responses array
                 const [
                     arabiaWeatherResult,
                     wuResult, wuDaily1, wuResult2, wuDaily2, wuResult3, wuDaily3, wuResult4, wuDaily4,
