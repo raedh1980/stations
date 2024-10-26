@@ -310,9 +310,9 @@ function App() {
 
             try {
                 // Create an axios instance with a timeout
-                const axiosInstance = axios.create({
-                    timeout: 3000, // Timeout after 10 seconds (adjust as needed)
-                });
+                const axiosInstance = axios.create(
+                   // { timeout: 3000, }
+                );
 
                 // Perform all API calls in parallel using Promise.allSettled
                 const responses = await Promise.allSettled([
