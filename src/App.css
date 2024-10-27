@@ -26,11 +26,12 @@
     }
 
         /* Specific width for "المحطة" column */
-        .rtl-table th:nth-child(1), .rtl-table td:nth-child(1) {
+        .rtl-table th:nth-child(1), .rtl-table td:nth-child(1), .rtl-table td:nth-child(8) {
             max-width: 100px; /* Set max width as needed */
             width: 100px; /* Set fixed width to control the cell width */
             overflow: hidden; /* Hide overflow if content is too wide */
             text-overflow: ellipsis; /* Add ellipsis for long content */
+            font-weight: bold;
         }
 
     /* Header background and text color */
