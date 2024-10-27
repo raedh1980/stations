@@ -9,9 +9,10 @@
 }
 
 .rtl-table {
-    font-size: 14px;
+    font-size: 13px;
+    width: 100%;
     max-width: 1024px;
-    font-family: 'Tajawal', sans-serif;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
     direction: rtl;
     border-collapse: collapse;
     border: 1px solid #ccc;
@@ -47,3 +48,17 @@
         .rtl-table th.sorted-desc::after {
             content: " ▼";
         }
+
+/* Larger font size for desktop screens */
+@media (min-width: 1024px) {
+
+
+    .rtl-table {
+       
+        font-size: 16px; /* Larger font for desktop */
+    }
+
+        .rtl-table th, .rtl-table td {
+            padding: 3px; /* Increase padding for readability on larger screens */
+        }
+}
