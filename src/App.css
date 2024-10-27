@@ -1,49 +1,36 @@
-﻿/* Ensure the table container allows scrolling on smaller screens */
-@media (max-width: 1020px) {
-    .container {
-        width: 100%; /* Ensure the container takes full width */
-        overflow-x: auto; /* Enable horizontal scrolling */
-        overflow-y: hidden; /* Prevent vertical scrolling */
-    }
+﻿
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
 
-    .rtl-table {
-        font-size: 14px; /* Adjust font size for mobile */
-        white-space: nowrap; /* Prevent wrapping of table content */
-    }
-
-    th, td {
-        padding: 8px; /* Reduce padding for smaller screens */
-    }
+.container {
+    direction: rtl; /* Apply RTL to the container */
+    overflow-x: auto;
+    overflow-y: hidden;
+    text-align: center; /* Ensure the container aligns content to the right */
 }
 
-
-
-
-
-/* Table styling */
-th, td {
-    border: 1px solid #ddd;
-    padding: 10px;
-}
-
-/* RTL Table Styling */
 .rtl-table {
-    font-size: 17px;
+    font-size: 14px;
     max-width: 1024px;
-    font-family: Calibri;
-    font-weight: bold;
+    font-family: 'Tajawal', sans-serif;
     direction: rtl;
     border-collapse: collapse;
     border: 1px solid #ccc;
     white-space: nowrap; /* Prevent text from wrapping */
 }
 
-    /* Header and cell styling */
     .rtl-table th, .rtl-table td {
-        border: 3px solid #ccc;
+        border: 1px solid #ccc;
         padding: 5px;
-        text-align: center;
+        text-align: center; /* Align content to the right */
     }
+
+        /* Specific width for "المحطة" column */
+        .rtl-table th:nth-child(1), .rtl-table td:nth-child(1) {
+            max-width: 100px; /* Set max width as needed */
+            width: 100px; /* Set fixed width to control the cell width */
+            overflow: hidden; /* Hide overflow if content is too wide */
+            text-overflow: ellipsis; /* Add ellipsis for long content */
+        }
 
     /* Header background and text color */
     .rtl-table th {

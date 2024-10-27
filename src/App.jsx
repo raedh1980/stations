@@ -265,7 +265,7 @@ function App() {
 
     useEffect(() => {
         const fetchData = async () => {
-            setLastUpdateTime(new Date().toLocaleString()); // Updates with the current time
+            setLastUpdateTime(new Date().toLocaleTimeString()); // Updates with the current time
 
             // Define Weather Underground API keys and station IDs
             const wuStations = [
@@ -311,7 +311,7 @@ function App() {
             try {
                 // Create an axios instance with a timeout
                 const axiosInstance = axios.create(
-                    { timeout: 4000, }
+                    { timeout: 10000, }
                 );
 
                 // Perform all API calls in parallel using Promise.allSettled
@@ -682,7 +682,7 @@ function App() {
         <div className="container">
 
             <table className="rtl-table" >
-                <thead><tr><th>اخر تحديث: {lastUpdateTime}</th></tr>
+                <thead><tr><th>{lastUpdateTime}</th></tr>
                     <tr>
                         <th >المحطة</th>
                         <th className={sortConfig.key === 'stationName' ? `sorted-${sortConfig.direction}` : ''} onClick={() => setSortConfig({ key: 'temp', direction: sortConfig.direction === 'ascending' ? 'descending' : 'ascending' })}>الحرارة</th>
