@@ -655,7 +655,7 @@ function App() {
             windgustColor: getWindSpeedColor(currentObservation.metric.windGust),
             dailyrain: currentObservation.metric.precipTotal !== null ? currentObservation.metric.precipTotal.toFixed(1) : '0.0',
             rainin: last5minrain, // currentObservation.metric.precipRate.toFixed(1),
-            rainRateColor: getRainRateColor(currentObservation.metric.precipRate),
+            rainRateColor: getRainRateColor(last5minrain),
             totalRainColor: getRainTotalColor(currentObservation.metric.precipTotal),
             tempMAX: tempMax, // Converting to Celsius
             tempMIN: tempMin,
