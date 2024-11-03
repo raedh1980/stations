@@ -617,7 +617,7 @@ function App() {
         var last5minrain = currentData.observations[0].metric.precipRate.toFixed(1);
 
         // Ensure the observations are sorted by time
-        if (filteredObservations.length >= 2 && currentData.observations[0].stationID != 'IAJLOU2') {
+        if (filteredObservations.length >= 2 ) {
             var latestObservation = currentData;
             var observationOne5MinAgo = filteredObservations[filteredObservations.length - 1];
 
