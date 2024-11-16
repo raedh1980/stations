@@ -630,7 +630,9 @@ function App() {
                 // if (timeDiffMinutes > 0 && timeDiffMinutes <= 15) {
 
     
-                    if (timeDiffMinutes > 0 && timeDiffMinutes <= 10) timeDiffMinutes = 10;
+                if (timeDiffMinutes > 0 && timeDiffMinutes <= 10) timeDiffMinutes = 10;
+           
+
 
                     last5minrain = (latestObservation.observations[0].metric.precipTotal - observationOne5MinAgo.metric.precipTotal).toFixed(1);
 
@@ -724,7 +726,7 @@ function App() {
                                 backgroundColor: item.rainRateColor ? item.rainRateColor.backgroundColor : '#FFFFFF',
                                 color: item.rainRateColor ? item.rainRateColor.color : '#000000'
                             }}>
-                                {item.rainin|| '0'} مم/س
+                                {item.rainin|| '0'}
                             </td>
 
 
@@ -734,7 +736,7 @@ function App() {
                                 backgroundColor: item.totalRainColor ? item.totalRainColor.backgroundColor : '#FFFFFF',
                                 color: item.totalRainColor ? item.totalRainColor.color : '#000000'
                             }}>
-                                {item.dailyrain || '0'} مم
+                                {item.dailyrain || '0'}
                             </td>
 
 
