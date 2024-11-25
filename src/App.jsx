@@ -170,7 +170,7 @@ function getRHColor(RH) {
 function getTemperatureColor(value) {
     // Define temperature breakpoints
     const freezingMax = 0;   // Blue gradient up to 0°C
-    const coolMax = 9.9;       // 0-9°C: Gradient Blue to Green
+    const coolMax = 7.4;       // 0-9°C: Gradient Blue to Green
     const moderateMax = 19;  // 10-18°C: Gradient Green to Yellow
     const warmMax = 29;      // 19-29°C: Gradient Yellow to Orange
     const hotMax = 40;       // 30-40°C: Gradient Red
