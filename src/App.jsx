@@ -193,7 +193,7 @@ function getTemperatureColor(value) {
     } else if (value > moderateMax && value <= warmMax) {
         // Warm: Gradient Yellow to Orange
         const ratio = (value - moderateMax) / (warmMax - moderateMax); // 0 to 1
-        hue = interpolate(70, 30, ratio); // Yellow (60) to Orange (30)
+        hue = interpolate(60, 35, ratio); // Yellow (60) to Orange (30)
     } else if (value > warmMax && value <= hotMax) {
         // Hot: Gradient Orange to Red
         const ratio = (value - warmMax) / (hotMax - warmMax); // 0 to 1
@@ -209,7 +209,7 @@ function getTemperatureColor(value) {
 
     // Define saturation and lightness
     const saturation = 100; // Percentage
-    const lightness = 50;  // Percentage (increased for better visibility)
+    const lightness = 48;  // Percentage (increased for better visibility)
 
     // Convert HSL to HEX
     const color = hslToHex(hue, saturation, lightness);
