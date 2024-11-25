@@ -168,71 +168,110 @@ function getRHColor(RH) {
 
 }
 function getTemperatureColor(value) {
+    // Define temperature breakpoints
+    const minTemp = -10;
+    const veryColdMax = 3;
+    const coldMax = 8;
+    const moderateMax = 30;
+    const warmMax = 50;
 
-    if (value >= -10 && value <= 0) {
-        return { backgroundColor: '#000000', color: '#FFFFFF' }; // Pale blue
-    } else if (value > 0 && value <= 5) {
-        return { backgroundColor: '#0000FF', color: '#FFFFFF' }; // Lighter blue
-    } else if (value > 5 && value <= 8) {
-        return { backgroundColor: '#6495ED', color: '#FFFFFF' }; // Light cyan
-    } else if (value > 8 && value <= 10) {
-        return { backgroundColor: '#0F9F55', color: '#FFFFFF' }; // Soft teal
-    } else if (value > 10 && value <= 13) {
-        return { backgroundColor: '#12A95C', color: '#FFFFFF' }; // Light green
-    } else if (value > 13 && value <= 15) {
-        return { backgroundColor: '#15BB66', color: '#000000' }; // Lidfdfdme
-    } else if (value > 15 && value <= 16) {
-        return { backgroundColor: '#1CD777', color: '#000000' }; // Light yellow
-    } else if (value > 16 && value <= 18) {
-        return { backgroundColor: '#BDF516', color: '#000000' }; // Orange
+    let hue;
 
-    } else if (value > 18 && value < 20) {
-        return { backgroundColor: '#eaf516', color: '#000000' }; // Orange
-
-    } else if (value >= 20 && value <= 22) {
-        return { backgroundColor: '#FFFF33', color: '#000000' }; // Deep coral
-    } else if (value > 22 && value <= 23) {
-        return { backgroundColor: '#FEF250', color: '#000000' }; // Reddish orange
-    } else if (value > 23 && value <= 24) {
-        return { backgroundColor: '#FFDB58', color: '#000000' }; // Red
-    } else if (value > 24 && value <= 25) {
-        return { backgroundColor: '#FDD017', color: '#000000' }; // Deep red
-    } else if (value > 25 && value <= 28) {
-        return { backgroundColor: '#F9BF3F', color: '#000000' }; // Darker red
-    } else if (value > 28 && value < 30) {
-        return { backgroundColor: '#DF6D14', color: '#000000' }; // Dark red
-    }
-    else if (value >= 30 && value <= 32) {
-        return { backgroundColor: '#ff3b3b', color: '#FFFFFF' }; // Burgundy
-    }
-    else if (value > 32 && value <= 34) {
-        return { backgroundColor: '#fa1414', color: '#FFFFFF' }; // Plum
-    }
-    else if (value > 34 && value <= 36) {
-        return { backgroundColor: '#fa1414', color: '#FFFFFF' }; // Plum
-    }
-
-    else if (value > 36 && value <= 38) {
-        return { backgroundColor: '#b30000', color: '#FFFFFF' }; // Plum
-
-    } else if (value > 38 && value < 40) {
-        return { backgroundColor: '#800000', color: '#FFFFFF' }; // Dark plum
-
-    } else if (value >= 40 && value < 42) {
-        return { backgroundColor: '#5E0000', color: '#FFFFFF' }; // Near black
-
-    } else if (value >= 42 && value <= 44) {
-        return { backgroundColor: '#660000', color: '#FFFFFF' }; // Near black
-
-    } else if (value > 44 && value <= 46) {
-        return { backgroundColor: '#4d0000', color: '#FFFFFF' }; // Near black
-
-    } else if (value > 46) {
-        return { backgroundColor: '#330000', color: '#FFFFFF' }; // Near black
-
+    if (value <= veryColdMax) {
+        // Very Cold: Fixed blue
+        hue = 240;
+    } else if (value > veryColdMax && value <= coldMax) {
+        // Cold: Blue to Green
+        const ratio = (value - veryColdMax) / (coldMax - veryColdMax); // 0 to 1
+        hue = interpolate(240, 120, ratio);
+    } else if (value > coldMax && value <= moderateMax) {
+        // Moderate: Green to Yellow
+        const ratio = (value - coldMax) / (moderateMax - coldMax); // 0 to 1
+        hue = interpolate(120, 60, ratio);
+    } else if (value > moderateMax && value <= warmMax) {
+        // Warm: Yellow to Red
+        const ratio = (value - moderateMax) / (warmMax - moderateMax); // 0 to 1
+        hue = interpolate(60, 0, ratio);
+    } else if (value > warmMax) {
+        // Above Warm: Fixed deep red
+        hue = 0;
     } else {
-        return { backgroundColor: '#FFFFFF', color: '#000000' }; // Default for out of range
+        // Default to white if out of range
+        return { backgroundColor: '#FFFFFF', color: '#000000' };
     }
+
+    // Define saturation and lightness
+    const saturation = 40; // in percentage
+    const lightness = 40;  // in percentage
+
+    // Convert HSL to HEX
+    const color = hslToHex(hue, saturation, lightness);
+
+    let textColor;
+
+    // Override text color to white for cold temperatures (10°C and below)
+    if (value <= coldMax) {
+        textColor = '#FFFFFF';
+    } else {
+        // Determine text color based on background color brightness
+        textColor = getContrastColor(color);
+    }
+
+    return { backgroundColor: color, color: textColor };
+}
+
+// Helper function to interpolate between two values
+function interpolate(start, end, ratio) {
+    return start + (end - start) * ratio;
+}
+
+// Helper function to convert HSL to HEX
+function hslToHex(h, s, l) {
+    h /= 360;
+    s /= 100;
+    l /= 100;
+    let r, g, b;
+
+    if (s === 0) {
+        r = g = b = l; // Achromatic
+    } else {
+        const hue2rgb = (p, q, t) => {
+            if (t < 0) t += 1;
+            if (t > 1) t -= 1;
+            if (t < 1 / 6) return p + (q - p) * 6 * t;
+            if (t < 1 / 2) return q;
+            if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+            return p;
+        };
+
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        const p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1 / 3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1 / 3);
+    }
+
+    const toHex = x => {
+        const hex = Math.round(x * 255).toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+    };
+
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+// Helper function to determine contrasting text color (black or white)
+function getContrastColor(hex) {
+    // Convert HEX to RGB
+    const bigint = parseInt(hex.slice(1), 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+
+    // Calculate luminance
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+    // Return black for light backgrounds and white for dark backgrounds
+    return luminance > 0.5 ? '#000000' : '#FFFFFF';
 }
 
 
