@@ -169,48 +169,55 @@ function getRHColor(RH) {
 }
 function getTemperatureColor(value) {
     // Define temperature breakpoints
-    const minTemp = -10;
-    const veryColdMax = 3;
-    const coldMax = 8;
-    const moderateMax = 30;
-    const warmMax = 50;
+    const freezingMax = 0;   // Blue gradient up to 0°C
+    const coolMax = 9.9;       // 0-9°C: Gradient Blue to Green
+    const moderateMax = 19;  // 10-18°C: Gradient Green to Yellow
+    const warmMax = 29;      // 19-29°C: Gradient Yellow to Orange
+    const hotMax = 40;       // 30-40°C: Gradient Red
+    const veryHotMin = 41;   // 40+°C: Gradient Pink
 
     let hue;
 
-    if (value <= veryColdMax) {
-        // Very Cold: Fixed blue
-        hue = 240;
-    } else if (value > veryColdMax && value <= coldMax) {
-        // Cold: Blue to Green
-        const ratio = (value - veryColdMax) / (coldMax - veryColdMax); // 0 to 1
-        hue = interpolate(240, 120, ratio);
-    } else if (value > coldMax && value <= moderateMax) {
-        // Moderate: Green to Yellow
-        const ratio = (value - coldMax) / (moderateMax - coldMax); // 0 to 1
-        hue = interpolate(120, 60, ratio);
+    if (value <= freezingMax) {
+        // Freezing: Gradient blue
+        const ratio = value / freezingMax; // Negative values scale within the range
+        hue = interpolate(240, 200, Math.max(0, ratio)); // Deep blue (240) to lighter blue
+    } else if (value > freezingMax && value <= coolMax) {
+        // Cool: Blue to Green
+        const ratio = (value - freezingMax) / (coolMax - freezingMax); // 0 to 1
+        hue = interpolate(240, 120, ratio); // Blue (240) to Green (120)
+    } else if (value > coolMax && value <= moderateMax) {
+        // Moderate: Gradient Green to Yellow
+        const ratio = (value - coolMax) / (moderateMax - coolMax); // 0 to 1
+        hue = interpolate(120, 60, ratio); // Green (120) to Yellow (60)
     } else if (value > moderateMax && value <= warmMax) {
-        // Warm: Yellow to Red
+        // Warm: Gradient Yellow to Orange
         const ratio = (value - moderateMax) / (warmMax - moderateMax); // 0 to 1
-        hue = interpolate(60, 0, ratio);
-    } else if (value > warmMax) {
-        // Above Warm: Fixed deep red
-        hue = 0;
+        hue = interpolate(70, 30, ratio); // Yellow (60) to Orange (30)
+    } else if (value > warmMax && value <= hotMax) {
+        // Hot: Gradient Orange to Red
+        const ratio = (value - warmMax) / (hotMax - warmMax); // 0 to 1
+        hue = interpolate(30, 0, ratio); // Orange (30) to Red (0)
+    } else if (value >= veryHotMin) {
+        // Very Hot: Gradient Red to Pink
+        const ratio = Math.min(1, (value - veryHotMin) / (hotMax - veryHotMin)); // Clamp ratio between 0 and 1
+        hue = interpolate(0, 330, ratio); // Red (0) to Pink (330)
     } else {
         // Default to white if out of range
         return { backgroundColor: '#FFFFFF', color: '#000000' };
     }
 
     // Define saturation and lightness
-    const saturation = 40; // in percentage
-    const lightness = 40;  // in percentage
+    const saturation = 100; // Percentage
+    const lightness = 50;  // Percentage (increased for better visibility)
 
     // Convert HSL to HEX
     const color = hslToHex(hue, saturation, lightness);
 
     let textColor;
 
-    // Override text color to white for cold temperatures (10°C and below)
-    if (value <= coldMax) {
+    // Override text color to white for cold temperatures (<= 9°C)
+    if (value <= coolMax) {
         textColor = '#FFFFFF';
     } else {
         // Determine text color based on background color brightness
@@ -219,6 +226,7 @@ function getTemperatureColor(value) {
 
     return { backgroundColor: color, color: textColor };
 }
+
 
 // Helper function to interpolate between two values
 function interpolate(start, end, ratio) {
@@ -252,7 +260,7 @@ function hslToHex(h, s, l) {
     }
 
     const toHex = x => {
-        const hex = Math.round(x * 255).toString(16);
+        const hex = Math.round(x * 220).toString(16);
         return hex.length === 1 ? '0' + hex : hex;
     };
 
