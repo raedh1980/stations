@@ -204,12 +204,12 @@ function getTemperatureColor(value) {
         hue = interpolate(0, 330, ratio); // Red (0) to Pink (330)
     } else {
         // Default to white if out of range
-        return { backgroundColor: '#FFFFFF', color: '#000000' };
+        return { backgroundColor: '#FFFFFF', color: '#000000', fontWeight: 'bold' };
     }
 
     // Define saturation and lightness
     const saturation = 100; // Percentage
-    const lightness = 48;  // Percentage (increased for better visibility)
+    const lightness = 46;  // Percentage (increased for better visibility)
 
     // Convert HSL to HEX
     const color = hslToHex(hue, saturation, lightness);
@@ -224,7 +224,7 @@ function getTemperatureColor(value) {
         textColor = getContrastColor(color);
     }
 
-    return { backgroundColor: color, color: textColor };
+    return { backgroundColor: color, color: textColor , fontWeight: 'bold'  };
 }
 
 
