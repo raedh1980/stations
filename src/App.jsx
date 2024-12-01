@@ -36,8 +36,8 @@ const stationMapping = {
     "IAMMAN46": "جبل الزهور ",
     "IJERAS1": "جرش",
     "IAMMAN21": "طبربور",
-    "IALJAM3": "تلاع - زياد",
-
+    "IALJAM3": "تلاع - زياد",        
+    "IAMMAN80":"ام اذينة",
     "IALJAM4": "الكوم",
     "piqvi310": "شفابدران",
     "mkcef941": "الكرامة",
@@ -325,7 +325,7 @@ function App() {
                 { apiKey: '9758586d0425493998586d0425593903', stationId: 'IBEITY7' },
                 { apiKey: 'fda10643a8fd4a14a10643a8fd9a14a0', stationId: 'IAJLOU2' },
                 { apiKey: '9adaf76dffda46669af76dffda466640', stationId: 'IAMMAN74' },
-
+                { apiKey: 'ae1700e39d4841849700e39d481184b2', stationId: 'IAMMAN80' },
                 
                ];
 
@@ -375,7 +375,7 @@ function App() {
                 const [
                     arabiaWeatherResult,
                     wuResult, wuDaily1, wuResult2, wuDaily2, wuResult3, wuDaily3, wuResult4, wuDaily4,
-                    wuResult6, wuDaily6, wuResult7, wuDaily7, wuResult8, wuDaily8, wuResult9, wuDaily9, wuResult10, wuDaily10,
+                    wuResult6, wuDaily6, wuResult7, wuDaily7, wuResult8, wuDaily8, wuResult9, wuDaily9, wuResult10, wuDaily10, wuResult11, wuDaily11,
                     multiQueryResult,
                     ...statsResults
                 ] = responses;
@@ -407,6 +407,7 @@ function App() {
                     transformWUData(getData(wuResult8), getData(wuDaily8)),
                     transformWUData(getData(wuResult9), getData(wuDaily9)),
                     transformWUData(getData(wuResult10), getData(wuDaily10)),
+                    transformWUData(getData(wuResult11), getData(wuDaily11)),
                 ].flat().filter(item => item != null); // Filter out nulls if necessary
 
                 // Process ArabiaWeather data
