@@ -631,12 +631,10 @@ function App() {
             .map(obs => obs.humidityHigh)
             .filter(value => value !== null && value !== undefined && !isNaN(value));
 
-
         // Compute max temperature, humidity, and wind gust from the filtered day data
         const tempMax = Math.max(...filteredObservations.map(obs => obs.metric.tempHigh));
         const windGustMax = Math.max(...filteredObservations.map(obs => obs.metric.windgustHigh));
         let humidityMax = Math.max(...validHumidityHighValues);
-
 
         // Compute min temperature using Math.min and a spread operator with filtering
         let tempMin = Math.min(
@@ -645,52 +643,47 @@ function App() {
                 .filter(tempLow => tempLow !== null && tempLow !== undefined)
         );
 
-        // Return null if tempMin is Infinity
+        // Handle cases where tempMin or humidityMax might be invalid
         tempMin = tempMin === Infinity ? 0 : tempMin;
         humidityMax = humidityMax === -Infinity ? 0 : humidityMax;
 
-     /*   var last5minrain = 0.0;
-        if (filteredObservations.length >= 2) {
-            var latestObservation = currentData;
-            var observationOne5MinAgo = filteredObservations[filteredObservations.length - 1];
-
-            if (latestObservation != null && observationOne5MinAgo != null) {
-                last5minrain = latestObservation.observations[0].metric.precipTotal - observationOne5MinAgo.metric.precipTotal;
-                //last5minrain = last5minrain >= 0 ? (last5minrain / 0.0833).toFixed(1) : 0; // Ensure no negative values
-                last5minrain = last5minrain >= 0 ? ((last5minrain / 5) * 60).toFixed(1) : 0; // based on cumulus software calculations
+        // Utility to safely handle toFixed for null/undefined values
+        const safeToFixed = (value, decimals = 1) => {
+            if (value === null || value === undefined || isNaN(value)) {
+                return '0.0';
             }
-        }*/
+            return Number(value).toFixed(decimals);
+        };
 
+        // Calculate the last 5-minute rain rate
+        let last5minrain = 0.0;
 
-        var last5minrain = currentData.observations[0].metric.precipRate.toFixed(1);
+        if (currentData.observations[0].metric.precipRate !== null && currentData.observations[0].metric.precipRate !== undefined) {
+            last5minrain = safeToFixed(currentData.observations[0].metric.precipRate, 1);
+        }
 
-        // Ensure the observations are sorted by time
-        if (filteredObservations.length >= 2 ) {
-            var latestObservation = currentData;
-            var observationOne5MinAgo = filteredObservations[filteredObservations.length - 1];
+        if (filteredObservations.length >= 2) {
+            const latestObservation = currentData;
+            const observationOne5MinAgo = filteredObservations[filteredObservations.length - 1];
 
             if (latestObservation != null && observationOne5MinAgo != null) {
-                // Get the time difference between the latest observation and the previous one
-                var timeDiffMillis = new Date(latestObservation.observations[0].obsTimeUtc).getTime() - new Date(observationOne5MinAgo.obsTimeUtc).getTime();
-                var timeDiffMinutes = timeDiffMillis / 60000; // convert milliseconds to minutes
+                const timeDiffMillis = new Date(latestObservation.observations[0].obsTimeUtc).getTime() -
+                    new Date(observationOne5MinAgo.obsTimeUtc).getTime();
+                let timeDiffMinutes = timeDiffMillis / 60000;
 
-                // Avoid unrealistic calculations by ignoring observations with a large time gap (e.g., >15 mins)
-                // if (timeDiffMinutes > 0 && timeDiffMinutes <= 15) {
-
-    
                 if (timeDiffMinutes > 0 && timeDiffMinutes <= 10) timeDiffMinutes = 10;
-                last5minrain = (latestObservation.observations[0].metric.precipTotal - observationOne5MinAgo.metric.precipTotal).toFixed(1);
 
-                    // Ensure no negative values and adjust calculation based on actual time difference
-                last5minrain = last5minrain >= 0 ? ((last5minrain / timeDiffMinutes) * 60).toFixed(1) : 0;
+                const precipTotalDiff = (latestObservation.observations[0].metric.precipTotal || 0) -
+                    (observationOne5MinAgo.metric.precipTotal || 0);
 
+                last5minrain = precipTotalDiff >= 0 ? ((precipTotalDiff / timeDiffMinutes) * 60).toFixed(1) : 0;
 
-                if (latestObservation.observations[0].metric.precipRate == 0)
-                    last5minrain = 0; // Set to 0 or handle as per your use case
-               
+                if (latestObservation.observations[0].metric.precipRate === 0)
+                    last5minrain = 0; // Set to 0 if no precipitation rate
             }
         }
 
+        // Return the transformed data
         return [{
             stationName: stationMapping[currentObservation.stationID], // Assuming mapping exists
             temp: currentObservation.metric.temp,
@@ -701,22 +694,23 @@ function App() {
             tempColor: getTemperatureColor(currentObservation.metric.temp),
             windspeedColor: getWindSpeedColor(currentObservation.metric.windSpeed),
             windgustColor: getWindSpeedColor(currentObservation.metric.windGust),
-            dailyrain: currentObservation.metric.precipTotal !== null ? currentObservation.metric.precipTotal.toFixed(1) : '0.0',
-            rainin: last5minrain, // currentObservation.metric.precipRate.toFixed(1),
+            dailyrain: safeToFixed(currentObservation.metric.precipTotal, 1),
+            rainin: last5minrain,
             rainRateColor: getRainRateColor(last5minrain),
             totalRainColor: getRainTotalColor(currentObservation.metric.precipTotal),
-            tempMAX: tempMax, // Converting to Celsius
+            tempMAX: tempMax,
             tempMIN: tempMin,
             tempMaxColor: getTemperatureColor(tempMax),
             tempMinColor: getTemperatureColor(tempMin),
-            windgustMAX: windGustMax, // Converting to km/h
+            windgustMAX: windGustMax,
             windspeedMAX: windGustMax,
             windgustMaxColor: getWindSpeedColor(windGustMax),
-            humidityMAX: humidityMax, // Adding humidityMax
+            humidityMAX: humidityMax,
             humidityMAXColor: getRHColor(humidityMax),
             last_updated: currentObservation.obsTimeUtc
         }];
     }
+
 
 
 
