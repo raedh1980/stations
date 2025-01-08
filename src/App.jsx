@@ -138,6 +138,8 @@ function getRainTotalColor(totalRain) {
 
 }
 
+
+
 function getRHColor(RH) {
 
     if (RH) {
