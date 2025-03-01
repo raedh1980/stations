@@ -17,7 +17,6 @@ const stationMapping = {
     "qxyne738": "المفرق",
     "jhcbn486": "سحاب",
     "nztkq622": "عجلون",
-    "jixdw557": "المقابلين",
     "jmwgr490": "جبل عمان",
     "jlqpp220": "ام السماق",
     "tnhkw851": "تلاع العلي",
@@ -42,7 +41,7 @@ const stationMapping = {
     "IALJAM4": "الكوم",
     "piqvi310": "شفابدران",
     "mkcef941": "الكرامة",
-    "jixdw557": "البنيات",
+    "jixdw557": "ام الدرج",
     "IBEITY7": "بيت لحم",
     "igyzo441": "سوف",
     "IAJLOU2": "كفرنجة"
