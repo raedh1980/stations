@@ -22,3 +22,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+/obj/Debug/realtimenew.esproj.FileListAbsolute.txt
+/.github/workflows/azure-static-web-apps-purple-hill-0840be103.yml

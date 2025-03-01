@@ -1,55 +1,65 @@
-﻿@media (max-width: 1020px) {
-    body, .container {
-        width: 1020px; /* Force the width to be 1024px on all devices */
-        overflow-x: visible; /* Allow horizontal scrolling */
-    }
+﻿
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
+
+.container {
+    direction: rtl; /* Apply RTL to the container */
+    overflow-x: auto;
+    overflow-y: hidden;
+    text-align: center; /* Ensure the container aligns content to the right */
 }
-
-th, td {
-    border: 1px solid #ddd; /* Optional: adds border for clarity */
-   
-    padding: 10px;
-}
-
- 
-
-  
 
 .rtl-table {
-    font-size: 17px;
-  
-    max-width: 1024; /* Or set a maximum width */
-    float: right;
-    font-family: Calibri;
-    font-weight: bold;
+    font-size: 13px;
+    width: 100%;
+    max-width: 1024px;
+    font-family: Dubai;
     direction: rtl;
-    
-    border-collapse: collapse; /* Collapses borders between table cells */
-
-   
-    border: 1px solid #ccc; /* Adds a border around the table */
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+    white-space: nowrap; /* Prevent text from wrapping */
 }
 
-
-    .rtl-table th,
-    .rtl-table td {
-        border: 3px solid #ccc; /* Light grey border for readability */
-        padding: 5px; /* Adds space around text in each cell */
-        text-align: center;
+    .rtl-table th, .rtl-table td {
+        border: 1px solid #ccc;
+        padding: 5px;
+        text-align: center; /* Align content to the right */
     }
 
+        /* Specific width for "المحطة" column */
+        .rtl-table th:nth-child(1), .rtl-table td:nth-child(1), .rtl-table td:nth-child(8) {
+            max-width: 100px; /* Set max width as needed */
+            width: 100px; /* Set fixed width to control the cell width */
+            overflow: hidden; /* Hide overflow if content is too wide */
+            text-overflow: ellipsis; /* Add ellipsis for long content */
+            font-weight: bold;
+        }
+
+    /* Header background and text color */
     .rtl-table th {
-        background-color: #f9f9f9; /* Light background for headers */
-        color: #333; /* Darker text for contrast */
-    }
-    .rtl-table th,
-    .rtl-table td {
+        background-color: #f9f9f9;
+        color: #333;
         cursor: pointer;
     }
+
+        /* Sorting indicators */
         .rtl-table th.sorted-asc::after {
             content: " ▲";
         }
 
-        .rtl-table  th.sorted-desc::after {
+        .rtl-table th.sorted-desc::after {
             content: " ▼";
         }
+
+/* Larger font size for desktop screens */
+@media (min-width: 1024px) {
+
+
+    .rtl-table {
+       
+        font-size: 16px; /* Larger font for desktop */
+    }
+
+        .rtl-table th, .rtl-table td {
+            padding: 3px; /* Increase padding for readability on larger screens */
+        }
+}
