@@ -48,7 +48,7 @@ const stationMapping = {
 };
 
 
-
+  
 
 function degreesToCardinalDetailed(degrees) {
     const cardinals = [
