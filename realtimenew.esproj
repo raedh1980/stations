@@ -7,6 +7,7 @@
     <ShouldRunBuildScript>false</ShouldRunBuildScript>
     <!-- Folder where production build objects will be placed -->
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist</BuildOutputFolder>
+    <StartupCommandWorkingDirectory>D:\source\source\repos\Realtimenew\realtimenew</StartupCommandWorkingDirectory>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="NewFolder1\**" />
