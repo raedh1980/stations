@@ -7,7 +7,7 @@ export default defineConfig({
     server: {
         proxy: {
             '/api': {  // This should match the path you use in your Axios call
-                target: 'http://localhost:3001',
+                target: 'http://localhost:5173',
                 changeOrigin: true,
                 rewrite: path => path.replace(/^\/api/, '')
             }
