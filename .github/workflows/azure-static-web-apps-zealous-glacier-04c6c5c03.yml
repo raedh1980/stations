@@ -28,14 +28,17 @@ jobs:
         with:
           node-version: 18 # Use a stable Node.js version
 
+      - name: Detect Project Structure
+        run: ls -R
+
       - name: Install Dependencies
         run: |
-          cd realtimenew
+          if [ -d "realtimenew" ]; then cd realtimenew; fi
           npm install
 
       - name: Build React App
         run: |
-          cd realtimenew
+          if [ -d "realtimenew" ]; then cd realtimenew; fi
           npm run build
 
       - name: Install OIDC Client from Core Package
@@ -56,9 +59,9 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ZEALOUS_GLACIER_04C6C5C03 }}
           action: "upload"
-          app_location: "realtimenew" # Set correct app source path
+          app_location: "realtimenew" # If your project is inside "realtimenew", keep this. Otherwise, use "."
           api_location: "" # No API
-          output_location: "realtimenew/build" # Correct build output
+          output_location: "realtimenew/build" # Adjust based on folder structure
           github_id_token: ${{ steps.idtoken.outputs.result }}
 
   close_pull_request_job:
