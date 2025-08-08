@@ -173,62 +173,52 @@ function getRHColor(RH) {
 }
 function getTemperatureColor(value) {
     // Define temperature breakpoints
-    const freezingMax = 0;   // Blue gradient up to 0°C
-    const coolMax = 7.4;       // 0-9°C: Gradient Blue to Green
-    const moderateMax = 19;  // 10-18°C: Gradient Green to Yellow
-    const warmMax = 29;      // 19-29°C: Gradient Yellow to Orange
-    const hotMax = 40;       // 30-40°C: Gradient Red
-    const veryHotMin = 41;   // 40+°C: Gradient Pink
+    const freezingMax = 0;   // ≤ 0°C
+    const coolMax = 7.4; // 0–7.4°C
+    const moderateMax = 19;  // 7.4–19°C
+    const warmMax = 29;  // 19–29°C
+    const hotMax = 39;  // 29–39°C  ← changed from 40 to 39
+    const veryHotMin = 40;  // ≥ 40°C  ← changed from 41 to 40
 
     let hue;
 
     if (value <= freezingMax) {
-        // Freezing: Gradient blue
-        const ratio = value / freezingMax; // Negative values scale within the range
-        hue = interpolate(240, 200, Math.max(0, ratio)); // Deep blue (240) to lighter blue
-    } else if (value > freezingMax && value <= coolMax) {
-        // Cool: Blue to Green
-        const ratio = (value - freezingMax) / (coolMax - freezingMax); // 0 to 1
-        hue = interpolate(240, 120, ratio); // Blue (240) to Green (120)
-    } else if (value > coolMax && value <= moderateMax) {
-        // Moderate: Gradient Green to Yellow
-        const ratio = (value - coolMax) / (moderateMax - coolMax); // 0 to 1
-        hue = interpolate(120, 60, ratio); // Green (120) to Yellow (60)
-    } else if (value > moderateMax && value <= warmMax) {
-        // Warm: Gradient Yellow to Orange
-        const ratio = (value - moderateMax) / (warmMax - moderateMax); // 0 to 1
-        hue = interpolate(60, 35, ratio); // Yellow (60) to Orange (30)
-    } else if (value > warmMax && value <= hotMax) {
-        // Hot: Gradient Orange to Red
-        const ratio = Math.min(1, (value - warmMax) / (hotMax - warmMax));
-        hue = interpolate(30, 0, ratio); // Orange (30) to Red (0)
+        // Freezing: deep blue→light blue
+        const ratio = Math.max(0, value / freezingMax);
+        hue = interpolate(240, 200, ratio);
+    } else if (value <= coolMax) {
+        // Cool: blue→green
+        const ratio = (value - freezingMax) / (coolMax - freezingMax);
+        hue = interpolate(240, 120, ratio);
+    } else if (value <= moderateMax) {
+        // Moderate: green→yellow
+        const ratio = (value - coolMax) / (moderateMax - coolMax);
+        hue = interpolate(120, 60, ratio);
+    } else if (value <= warmMax) {
+        // Warm: yellow→orange
+        const ratio = (value - moderateMax) / (warmMax - moderateMax);
+        hue = interpolate(60, 35, ratio);
+    } else if (value <= hotMax) {
+        // Hot: orange→red
+        const ratio = (value - warmMax) / (hotMax - warmMax);
+        hue = interpolate(30, 0, ratio);
     } else if (value >= veryHotMin) {
-        // Very Hot: Gradient Red to Pink
-        const ratio = Math.min(1, (value - veryHotMin) / (50 - veryHotMin)); // assume 50°C as upper bound
-        hue = interpolate(0, 330, ratio); // Red (0) to Pink (330)
+        // Very hot: red→pink (starts at 40°C)
+        const ratio = Math.min(1, (value - veryHotMin) / (50 - veryHotMin));
+        hue = interpolate(0, 330, ratio);
     } else {
-        // Default to white if out of range
         return { backgroundColor: '#FFFFFF', color: '#000000', fontWeight: 'bold' };
     }
 
-    // Define saturation and lightness
-    const saturation = 100; // Percentage
-    const lightness = 46;  // Percentage (increased for better visibility)
-
-    // Convert HSL to HEX
+    const saturation = 100;
+    const lightness = 46;
     const color = hslToHex(hue, saturation, lightness);
 
-    let textColor;
+    const textColor = value <= coolMax
+        ? '#FFFFFF'
+        : getContrastColor(color);
 
-    // Override text color to white for cold temperatures (<= 9°C)
-    if (value <= coolMax) {
-        textColor = '#FFFFFF';
-    } else {
-        // Determine text color based on background color brightness
-        textColor = getContrastColor(color);
-    }
-
-    return { backgroundColor: color, color: textColor , fontWeight: 'bold'  };
+    return { backgroundColor: color, color: textColor, fontWeight: 'bold' };
 }
 
 
