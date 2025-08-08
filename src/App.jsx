@@ -204,7 +204,7 @@ function getTemperatureColor(value) {
         hue = interpolate(30, 0, ratio); // Orange (30) to Red (0)
     } else if (value >= veryHotMin) {
         // Very Hot: Gradient Red to Pink
-        const ratio = Math.min(1, (value - veryHotMin) / (hotMax - veryHotMin)); // Clamp ratio between 0 and 1
+        const ratio = Math.min(1, (value - veryHotMin) / (50 - veryHotMin)); // assume 50°C as upper bound
         hue = interpolate(0, 330, ratio); // Red (0) to Pink (330)
     } else {
         // Default to white if out of range
