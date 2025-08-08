@@ -173,54 +173,57 @@ function getRHColor(RH) {
 }
 function getTemperatureColor(value) {
     // breakpoints
-    const freezingMax = 0;
-    const coolMax = 7.4;
-    const moderateMax = 19;
-    const warmMax = 29;
-    // hot: 30 up to but **not including** 40
-    const veryHotMin = 40;
+    const freezingMax = 0;    // ≤ 0°C
+    const coolMax = 7.4;  // >0–7.4°C
+    const moderateMax = 19;   // >7.4–19°C
+    const warmMax = 29;   // >19–29°C
+    const hotMax = 39;   // 30–39°C
 
     let hue;
+    const lightness = 46;     // constant for all, adjust if you want pink lighter
 
     if (value <= freezingMax) {
-        // ≤ 0°C → blue gradient
+        // ≤0: deep blue→light blue
         const ratio = Math.max(0, value / freezingMax);
         hue = interpolate(240, 200, ratio);
     }
     else if (value <= coolMax) {
-        // >0–7.4 → blue→green
+        // >0–7.4: blue→green
         const ratio = (value - freezingMax) / (coolMax - freezingMax);
         hue = interpolate(240, 120, ratio);
     }
     else if (value <= moderateMax) {
-        // >7.4–19 → green→yellow
+        // >7.4–19: green→yellow
         const ratio = (value - coolMax) / (moderateMax - coolMax);
         hue = interpolate(120, 60, ratio);
     }
     else if (value <= warmMax) {
-        // >19–29 → yellow→orange
+        // >19–29: yellow→orange
         const ratio = (value - moderateMax) / (warmMax - moderateMax);
         hue = interpolate(60, 35, ratio);
     }
-    else if (value < veryHotMin) {
-        // ≥29 and <40 → orange→red
-        const ratio = (value - warmMax) / (veryHotMin - warmMax);
-        hue = interpolate(30, 0, Math.min(Math.max(ratio, 0), 1));
+    else if (value <= hotMax) {
+        // >29–39: orange→red
+        const ratio = (value - warmMax) / (hotMax - warmMax);
+        hue = interpolate(30, 0, ratio);
     }
     else {
-        // ≥40 → red→pink
-        const ratio = Math.min(1, (value - veryHotMin) / (50 - veryHotMin));
-        hue = interpolate(0, 330, ratio);
+        // ≥40: fixed pink hue (330°)
+        hue = 330;
     }
 
     const saturation = 100;
-    const lightness = 46;
-    const bgColor = hslToHex(hue, saturation, lightness);
-    const textColor = (value <= coolMax ? '#FFFFFF' : getContrastColor(bgColor));
+    const backgroundColor = hslToHex(hue, saturation, lightness);
+    const textColor = value <= coolMax
+        ? '#FFFFFF'
+        : getContrastColor(backgroundColor);
 
-    return { backgroundColor: bgColor, color: textColor, fontWeight: 'bold' };
+    return {
+        backgroundColor,
+        color: textColor,
+        fontWeight: 'bold'
+    };
 }
-
 
 // Helper function to interpolate between two values
 function interpolate(start, end, ratio) {
