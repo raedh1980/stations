@@ -198,16 +198,13 @@ function getTemperatureColor(value) {
         // Warm: Gradient Yellow to Orange
         const ratio = (value - moderateMax) / (warmMax - moderateMax); // 0 to 1
         hue = interpolate(60, 35, ratio); // Yellow (60) to Orange (30)
-    } else if (value > warmMax && value <= hotMax) {
-        // Hot: Gradient Orange to Red
-        const ratio = Math.min(1, (value - warmMax) / (hotMax - warmMax));
-        hue = interpolate(30, 0, ratio); // Orange (30) to Red (0)
-    } else if (value >= veryHotMin) {
-        // Very Hot: Gradient Red to Pink
-        const ratio = Math.min(1, (value - veryHotMin) / (50 - veryHotMin)); // assume 50°C as upper bound
+    } else if (value >= hotMax) {
+        // 40°C and above → Red to Pink
+        const upperLimit = 50; // optional, prevents hue overflow
+        const ratio = Math.min(1, (value - hotMax) / (upperLimit - hotMax));
         hue = interpolate(0, 330, ratio); // Red (0) to Pink (330)
-    } else {
-        // Default to white if out of range
+    }
+   // Default to white if out of range
         return { backgroundColor: '#FFFFFF', color: '#000000', fontWeight: 'bold' };
     }
 
