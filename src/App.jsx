@@ -37,7 +37,7 @@ const stationMapping = {
     "IJERAS1": "جرش",
     "IAMMAN21": "طبربور",
     "IALJAM3": "تلاع - زياد",        
-    "IAMMAN80":"ام اذينة",
+    "IAMMAN80":"مادبا",
     "IALJAM4": "الكوم",
     "piqvi310": "شفابدران",
     "mkcef941": "الكرامة",
