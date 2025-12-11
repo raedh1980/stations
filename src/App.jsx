@@ -313,7 +313,7 @@ function App() {
 
             // Define Weather Underground API keys and station IDs
             const wuStations = [
-                { apiKey: 'c0146b8d4b904893946b8d4b90589325', stationId: 'IAMMAN46' },
+                { apiKey: '817506b64499464ab506b64499b64a96', stationId: 'IAMMAN46' },
                 { apiKey: 'fb407fb8c0454376807fb8c045237692', stationId: 'IJERAS1' },
                 { apiKey: '36d76d5a338a4641976d5a338a3641bb', stationId: 'IAMMAN21' },
                 { apiKey: '42189caf41184363989caf4118936362', stationId: 'IALJAM3' },
