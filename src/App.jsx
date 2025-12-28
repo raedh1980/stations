@@ -47,7 +47,9 @@ const stationMapping = {
     "IAJLOU2": "كفرنجة",
     "IALJAM6": "صويلح الارسال",
     "IALQUW9": "المقابلين",
-    "IAJLOU4" : "كفرنجة",
+    "IAJLOU4": "كفرنجة",
+
+
     
 };
 
