@@ -46,7 +46,9 @@ const stationMapping = {
     "igyzo441": "سوف",
     "IAJLOU2": "كفرنجة",
     "IALJAM6": "صويلح الارسال",
-    "IALQUW9": "ام القصير"
+    "IALQUW9": "المقابلين",
+    "IAJLOU4" : "كفرنجة"
+    
 };
 
 
@@ -325,6 +327,9 @@ function App() {
                 { apiKey: 'ae1700e39d4841849700e39d481184b2', stationId: 'IAMMAN80' }, 
                 { apiKey: '0ddcdfd0a33d477a9cdfd0a33d877ab9', stationId: 'IALJAM6' },
                 { apiKey: 'fda10643a8fd4a14a10643a8fd9a14a0', stationId: 'IALQUW9' },
+                { apiKey: 'dce52eb9cca642a1a52eb9cca662a16d', stationId: 'IAJLOU4' },
+
+                
                ];
 
             // Generate WU URLs for both current and daily data for all stations
